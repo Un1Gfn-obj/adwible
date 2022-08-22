@@ -1,6 +1,9 @@
 #include <gtk/gtk.h>
+#include <adwaita.h>
 
 #include "ck3fm7.h"
+
+// gtk_window_destroy() 
 
 static GResource *g_resources_register2(){
 
@@ -19,6 +22,9 @@ static GResource *g_resources_register2(){
   g_assert_true(0==flags);
   g_print("%zu bytes\n", size);
 
+  // binary dump
+  // g_resource_lookup_data()
+
   g_resources_register(r);
   return r;
 
@@ -28,6 +34,17 @@ int main(){
 
   GResource *r=g_resources_register2();
 
+  // segfaults
+  // https://gitlab.gnome.org/GNOME/libadwaita/-/blob/1.1.4/demo/adw-demo-window.c#L118
+  // g_type_ensure(GTK_TYPE_DIALOG);
+  // g_type_ensure(GTK_TYPE_BOX);
+  // g_type_ensure(GTK_TYPE_BUTTON);
+  // g_type_ensure(GTK_TYPE_LABEL);
+  // g_type_ensure(GTK_TYPE_BOX);
+  // g_type_ensure(GTK_TYPE_HEADER_BAR);
+  // g_type_ensure(GTK_TYPE_APPLICATION_WINDOW);
+  // g_type_ensure(GTK_TYPE_WINDOW);
+  adw_init();
   GtkBuilder *b=gtk_builder_new_from_resource("/com/un1gfn/ck3fm7/b7cj8w.ui"); g_assert_true(b);
 
   g_resources_unregister(r); g_resource_unref(r); r=NULL;
