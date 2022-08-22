@@ -4,14 +4,14 @@ N:=ninja -j4 -v -C $(O)
 default: run-ui
 
 run-ui: build
-	find $(O)/
+# 	find $(O)/
 	env G_DEBUG=fatal-warnings $(O)/adwible
 
 # order-only prerequisite
 # no rebuild on outdate
 build: | $(O)
-# 	$(N)
-	meson compile -v -C $(O)
+# 	meson compile -v -C $(O)
+	$(N)
 
 setup: | $(O)
 

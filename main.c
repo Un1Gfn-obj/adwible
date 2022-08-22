@@ -35,16 +35,16 @@ static void activate_cb(AdwApplication *app){
   // segfaults
   // https://gitlab.gnome.org/GNOME/libadwaita/-/blob/1.1.4/demo/adw-demo-window.c#L118
   // g_type_ensure(...);
-  adw_init();
+  // adw_init();
   GtkBuilder *b=gtk_builder_new_from_resource("/com/un1gfn/ck3fm7/b7cj8w.ui"); g_assert_true(b);
+  GObject *w=gtk_builder_get_object(b, "tf2fhx"); g_assert_true(w);
+  gtk_window_set_default_size(GTK_WINDOW(w), 720/2, 1200/2);
 
-  GObject *dialog = gtk_builder_get_object(b, "dialog1"); g_assert_true(dialog);
+  // GtkWidget *lb=gtk_label_new("Label");
+  // adw_application_window_set_content(ADW_APPLICATION_WINDOW(w), lb);
 
-  gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(dialog));
-
-  // gtk_window_set_default_size(GTK_WINDOW(window), 200, 200);
-  // adw_application_window_set_content(ADW_APPLICATION_WINDOW(window), label);
-  gtk_window_present(GTK_WINDOW(dialog));
+  gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(w));
+  gtk_window_present(GTK_WINDOW(w));
 
 }
 

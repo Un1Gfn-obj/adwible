@@ -1,21 +1,20 @@
 <interface>
   <requires lib="gtk" version="4.0"/>
   <requires lib="libadwaita" version="1.0"/>
-  <object class="GtkDialog" id="dialog1">
-    <child internal-child="content_area">
-      <object class="GtkBox" id="vbox1">
-        <child internal-child="action_area">
-          <object class="GtkBox" id="hbuttonbox1">
-            <child>
-              <object class="GtkButton" id="ok_button">
-                <property name="label" translatable="yes">_Ok</property>
-                <property name="use-underline">True</property>
-                <!-- <signal name="clicked" handler="ok_button_clicked"/> -->
-              </object>
-            </child>
+  <object class="AdwApplicationWindow" id="tf2fhx">
+    <property name="content">
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="AdwHeaderBar">
+            <property name="show-start-title-buttons">TRUE</property>
+            <property name="show-end-title-buttons">FALSE</property>
           </object>
         </child>
-      </object>
-    </child>
-  </object>
+        <child>
+          <object class="GtkBox"/>
+        </child>
+      </object> <!-- END GtkBox -->
+    </property> <!-- END AdwApplicationWindow.content -->
+  </object> <!-- END AdwApplicationWindow -->
 </interface>

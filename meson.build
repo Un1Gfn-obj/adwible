@@ -26,6 +26,7 @@ add_global_arguments('-D_GNU_SOURCE',
                      '-Wshadow',
                      '-Wno-error=deprecated-declarations',
                      '-Wno-error=unused-variable',
+                     '-Wno-error=unused-parameter',
                      language: 'c')
 
 # https://mesonbuild.com/Gnome-module.html#gnomecompile_resources
