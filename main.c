@@ -40,9 +40,6 @@ static void activate_cb(AdwApplication *app){
   GObject *w=gtk_builder_get_object(b, "tf2fhx"); g_assert_true(w);
   gtk_window_set_default_size(GTK_WINDOW(w), 720/2, 1200/2);
 
-  // GtkWidget *lb=gtk_label_new("Label");
-  // adw_application_window_set_content(ADW_APPLICATION_WINDOW(w), lb);
-
   gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(w));
   gtk_window_present(GTK_WINDOW(w));
 
@@ -59,7 +56,10 @@ int main(const int argc, char *argv[]){
 
   // run
   const int exit_code=g_application_run(G_APPLICATION(app), argc, argv);
-  g_resources_unregister(r); g_resource_unref(r); r=NULL;
+
+  // collect
+  g_resources_unregister(r); // g_resource_unref(r); // double free // valgrind "Invalid read of size 4"
+  r=NULL;
   return exit_code;
 
 }
