@@ -28,9 +28,9 @@ add_global_arguments('-D_GNU_SOURCE',
                      '-Wno-error=unused-variable',
                      language: 'c')
 
-executable('adwible',
-  'main_noresource.c',
-  dependencies: [
-    dependency('libadwaita-1'),
-  ]
-)
+pkgdatadir = join_paths(get_option('prefix'), get_option('datadir'), meson.project_name())
+
+gnome = import('gnome')
+
+subdir('0-noresource')
+subdir('1-res-gtkbuilder')

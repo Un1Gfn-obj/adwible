@@ -1,10 +1,11 @@
-include ./transferconf
+O:=builddir
 N:=ninja -j4 -v -C $(O)
 
 default: run-ui
 
 run-ui: build
-	env G_DEBUG=fatal-warnings $(O)/$(BIN)
+	find $(O)/1-*
+	env G_DEBUG=fatal-warnings $(O)/1-*/main
 
 # order-only prerequisite
 # no rebuild on outdate
