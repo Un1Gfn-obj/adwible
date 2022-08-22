@@ -30,25 +30,36 @@ static GResource *g_resources_register2(){
 
 }
 
-int main(){
-
-  GResource *r=g_resources_register2();
+static void activate_cb(AdwApplication *app){
 
   // segfaults
   // https://gitlab.gnome.org/GNOME/libadwaita/-/blob/1.1.4/demo/adw-demo-window.c#L118
-  // g_type_ensure(GTK_TYPE_DIALOG);
-  // g_type_ensure(GTK_TYPE_BOX);
-  // g_type_ensure(GTK_TYPE_BUTTON);
-  // g_type_ensure(GTK_TYPE_LABEL);
-  // g_type_ensure(GTK_TYPE_BOX);
-  // g_type_ensure(GTK_TYPE_HEADER_BAR);
-  // g_type_ensure(GTK_TYPE_APPLICATION_WINDOW);
-  // g_type_ensure(GTK_TYPE_WINDOW);
+  // g_type_ensure(...);
   adw_init();
   GtkBuilder *b=gtk_builder_new_from_resource("/com/un1gfn/ck3fm7/b7cj8w.ui"); g_assert_true(b);
 
-  g_resources_unregister(r); g_resource_unref(r); r=NULL;
+  GObject *dialog = gtk_builder_get_object(b, "dialog1"); g_assert_true(dialog);
 
-  return 0;
+  gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(dialog));
+
+  // gtk_window_set_default_size(GTK_WINDOW(window), 200, 200);
+  // adw_application_window_set_content(ADW_APPLICATION_WINDOW(window), label);
+  gtk_window_present(GTK_WINDOW(dialog));
+
+}
+
+int main(const int argc, char *argv[]){
+
+  // init
+  GResource *r=g_resources_register2();
+
+  // spawn
+  g_autoptr(AdwApplication) app = adw_application_new("com.un1gfn.adwible", G_APPLICATION_FLAGS_NONE); g_assert_true(app);
+  g_signal_connect(app, "activate", G_CALLBACK(activate_cb), NULL);
+
+  // run
+  const int exit_code=g_application_run(G_APPLICATION(app), argc, argv);
+  g_resources_unregister(r); g_resource_unref(r); r=NULL;
+  return exit_code;
 
 }

@@ -28,9 +28,20 @@ add_global_arguments('-D_GNU_SOURCE',
                      '-Wno-error=unused-variable',
                      language: 'c')
 
-pkgdatadir = join_paths(get_option('prefix'), get_option('datadir'), meson.project_name())
-
+# https://mesonbuild.com/Gnome-module.html#gnomecompile_resources
+# pkgdatadir = join_paths(get_option('prefix'), get_option('datadir'), meson.project_name())
 gnome = import('gnome')
+j72qkdresources = gnome.compile_resources('ck3fm7',
+  'ck3fm7.gresource.xml',
+  c_name: 'j72qkd',
+  gresource_bundle: false,
+)
 
-subdir('0-noresource')
-subdir('1-res-gtkbuilder')
+executable(meson.project_name(),
+  'main.c',
+  j72qkdresources,
+  dependencies: [
+    dependency('gtk4'),
+    dependency('libadwaita-1'),
+  ]
+)

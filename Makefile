@@ -4,8 +4,8 @@ N:=ninja -j4 -v -C $(O)
 default: run-ui
 
 run-ui: build
-	find $(O)/1-*
-	env G_DEBUG=fatal-warnings $(O)/1-*/main
+	find $(O)/
+	env G_DEBUG=fatal-warnings $(O)/adwible
 
 # order-only prerequisite
 # no rebuild on outdate
