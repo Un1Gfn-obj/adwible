@@ -1,15 +1,31 @@
 O:=builddir
 N:=ninja -j4 -v -C $(O)
+# DEBUGINFOD_TIMEOUT=0
+# G_DEBUG=fatal-warnings
+# debuginfo(8)
+# GOBJECT_DEBUG=instance-count 
+E:=env HTTPS_PROXY=http://127.0.0.1:8080/ DEBUGINFOD_URLS="/dev/null"
+V:=/bin/valgrind -v --keep-debuginfo=yes --leak-check=full --suppressions=/usr/share/gtk-4.0/valgrind/gtk.supp
+VL:=/tmp/valgrind.log
 
-default: run-ui
+default: r
 
-run-ui: build
+# run
+r: b
 # 	find $(O)/
-	env G_DEBUG=fatal-warnings $(O)/adwible
+# 	https://unix.stackexchange.com/questions/438117
+	@rm -fv $(VL)
+	$(E) $(O)/adwible
+
+# valgrind
+v: b
+	@echo ":; less -SRM +% -p 'HEAP SUMMARY' /tmp/valgrind.log"
+	@echo ":; tail -f -c +0 $(VL)"
+	$(E) $(V) --log-file=$(VL) $(O)/adwible
 
 # order-only prerequisite
 # no rebuild on outdate
-build: | $(O)
+b: | $(O)
 # 	meson compile -v -C $(O)
 	$(N)
 
