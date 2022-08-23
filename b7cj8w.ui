@@ -33,10 +33,17 @@
                   <object class="AdwExpanderRow">
                     <property name="title">Genesis</property>
                     <property name="subtitle">Bereshit</property>
-                    <property name="expanded">FALSE</property>
+                    <property name="expanded">TRUE</property>
                     <child>
-                      <object class="GtkFlowBox">
+                      <object class="GtkFlowBox" id="dx7fws">
                         <property name="max-children-per-line">255</property>
+                        <!-- <property name="selection-mode">GTK_SELECTION_MULTIPLE</property> -->
+                        <!-- <property name="can-focus">FALSE</property> -->
+                        <!-- <property name="can-target">FALSE</property> -->
+                        <!-- <property name="focus-on-click">FALSE</property> -->
+                        <!-- <property name="focusable">FALSE</property> -->
+                        <!-- <property name="sensitive">FALSE</property> -->
+                        <!-- <signal name="child-activated" handler="child_activated"/> -->
                         <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">TRUE</property> <property name="label">1 </property></object></child>
                         <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">TRUE</property> <property name="label">2 </property></object></child>
                         <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">TRUE</property> <property name="label">3 </property></object></child>

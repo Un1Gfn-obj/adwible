@@ -44,5 +44,6 @@ executable(meson.project_name(),
   dependencies: [
     dependency('gtk4'),
     dependency('libadwaita-1'),
+    dependency('gmodule-export-2.0'),  # https://docs.gtk.org/gtk4/class.Builder.html#signal-handlers-and-function-pointers
   ]
 )
