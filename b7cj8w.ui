@@ -2,6 +2,7 @@
   <requires lib="gtk" version="4.0"/>
   <requires lib="libadwaita" version="1.0"/>
   <object class="AdwApplicationWindow" id="tf2fhx">
+    <style><class name="flat"/></style>
     <property name="content">
       <object class="GtkBox">
         <property name="orientation">vertical</property>
@@ -13,16 +14,16 @@
         </child>
         <child>
           <object class="AdwPreferencesGroup">
-            <property name="title">Torah</property>
+            <property name="title">Law Torah Pentateuch</property>
             <property name="header-suffix">
               <object class="GtkButton">
+                <style><class name="flat"/></style>
                 <child>
                   <object class="AdwButtonContent">
-                    <property name="icon-name">list-add-symbolic</property>
+                    <property name="icon-name">help-about-symbolic</property>
                     <property name="label">mvdk8j</property>
                   </object>
                 </child>
-                <style><class name="flat"/></style>
               </object>
             </property>
             <child>
@@ -30,40 +31,144 @@
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="AdwExpanderRow">
-                    <property name="subtitle">Genesis</property>
-                    <property name="expanded">TRUE</property>
+                    <property name="title">Genesis</property>
+                    <property name="subtitle">Bereshit</property>
+                    <property name="expanded">FALSE</property>
                     <child>
                       <object class="GtkFlowBox">
-                        <child><object class="GtkFlowBoxChild"><child><object class="GtkToggleButton"><property name="label">1</property></object></child></object></child>
-                        <child><object class="GtkFlowBoxChild"><child><object class="GtkToggleButton"><property name="label">2</property></object></child></object></child>
-                        <child><object class="GtkFlowBoxChild"><child><object class="GtkToggleButton"><property name="label">3</property></object></child></object></child>
-                        <child><object class="GtkFlowBoxChild"><child><object class="GtkToggleButton"><property name="label">4</property></object></child></object></child>
-                        <child><object class="GtkFlowBoxChild"><child><object class="GtkToggleButton"><property name="label">5</property></object></child></object></child>
-                        <child><object class="GtkFlowBoxChild"><child><object class="GtkToggleButton"><property name="label">6</property></object></child></object></child>
-                        <child><object class="GtkFlowBoxChild"><child><object class="GtkToggleButton"><property name="label">7</property></object></child></object></child>
-                        <child><object class="GtkFlowBoxChild"><child><object class="GtkToggleButton"><property name="label">8</property></object></child></object></child>
-                        <child><object class="GtkFlowBoxChild"><child><object class="GtkToggleButton"><property name="label">9</property></object></child></object></child>
-                        <child><object class="GtkFlowBoxChild"><child><object class="GtkToggleButton"><property name="label">10</property></object></child></object></child>
-                        <child><object class="GtkFlowBoxChild"><child><object class="GtkToggleButton"><property name="label">11</property></object></child></object></child>
+                        <property name="max-children-per-line">255</property>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">TRUE</property> <property name="label">1 </property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">TRUE</property> <property name="label">2 </property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">TRUE</property> <property name="label">3 </property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">TRUE</property> <property name="label">4 </property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">TRUE</property> <property name="label">5 </property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">TRUE</property> <property name="label">6 </property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">TRUE</property> <property name="label">7 </property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">TRUE</property> <property name="label">8 </property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">TRUE</property> <property name="label">9 </property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">TRUE</property> <property name="label">10</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">TRUE</property> <property name="label">11</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">12</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">13</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">14</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">15</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">16</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">17</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">18</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">19</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">20</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">21</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">22</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">23</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">24</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">25</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">26</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">27</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">28</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">29</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">30</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">31</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">32</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">33</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">34</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">35</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">36</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">37</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">38</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">39</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">40</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">41</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">42</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">43</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">44</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">45</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">46</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">47</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">48</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">49</property></object></child>
+                        <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="active">FALSE</property><property name="label">50</property></object></child>
                       </object>
                     </child>
                   </object> <!-- END AdwExpanderRow "Genesis" -->
                 </child>
                 <child>
                   <object class="AdwExpanderRow">
-                    <property name="subtitle">Exodus</property>
-                    <property name="expanded">TRUE</property>
+                    <property name="title">Exodus</property>
+                    <property name="subtitle">Shemot</property>
+                    <property name="expanded">FALSE</property>
                     <child>
                       <object class="GtkFlowBox">
-                        <child><object class="GtkFlowBoxChild"><child><object class="GtkToggleButton"><property name="label">1</property></object></child></object></child>
+                        <property name="max-children-per-line">255</property>
+                        <child><object class="GtkFlowBoxChild"><child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="label">1</property></object></child></object></child>
                       </object>
                     </child>
                   </object> <!-- END AdwExpanderRow "Exodus" -->
                 </child>
+                <child>
+                  <object class="AdwExpanderRow">
+                    <property name="title">et al.</property>
+                    <property name="subtitle">...</property>
+                    <property name="expanded">FALSE</property>
+                  </object> <!-- END AdwExpanderRow "..." -->
+                </child>
               </object> <!-- END AdwPreferencesGroup>GtkBox -->
             </child>
-          </object> <!-- END AdwPreferencesGroup -->
+          </object> <!-- END AdwPreferencesGroup "Law" -->
         </child>
+
+                  <child>
+                    <object class="AdwPreferencesGroup">
+                      <property name="title">Historical Prophets Nevi'im</property>
+                      <property name="header-suffix">
+                        <object class="GtkButton">
+                          <style><class name="flat"/></style>
+                          <child>
+                            <object class="AdwButtonContent">
+                              <property name="icon-name">list-add-symbolic</property>
+                              <property name="label">g2g2z8</property>
+                            </object>
+                          </child>
+                        </object>
+                      </property>
+                      <child>
+                        <object class="GtkBox">
+                          <property name="orientation">vertical</property>
+                          <child>
+                            <object class="AdwExpanderRow">
+                              <property name="title">Joshua</property>
+                              <property name="subtitle">Yehoshua</property>
+                              <child>
+                                <object class="GtkFlowBox">
+                                  <property name="max-children-per-line">255</property>
+                                  <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="label">1</property></object></child>
+                                </object>
+                              </child>
+                            </object> <!-- END AdwExpanderRow "Joshua" -->
+                          </child>
+                          <child>
+                            <object class="AdwExpanderRow">
+                              <property name="title">Judges</property>
+                              <property name="subtitle">Shofetim</property>
+                              <child>
+                                <object class="GtkFlowBox">
+                                  <property name="max-children-per-line">255</property>
+                                  <child><object class="GtkToggleButton"><property name="halign">GTK_ALIGN_START</property><property name="label">1</property></object></child>
+                                </object>
+                              </child>
+                            </object> <!-- END AdwExpanderRow "Judges" -->
+                          </child>
+                          <child>
+                            <object class="AdwExpanderRow">
+                              <property name="title">et al.</property>
+                              <property name="subtitle">...</property>
+                              <property name="expanded">FALSE</property>
+                            </object> <!-- END AdwExpanderRow "etc" -->
+                          </child>
+                        </object> <!-- END AdwPreferencesGroup>GtkBox -->
+                      </child>
+                    </object> <!-- END AdwPreferencesGroup "Prophets" -->
+                  </child>
+
       </object> <!-- END GtkBox -->
     </property> <!-- END AdwApplicationWindow.content -->
   </object> <!-- END AdwApplicationWindow -->

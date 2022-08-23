@@ -1,12 +1,10 @@
 #include <gtk/gtk.h>
 #include <adwaita.h>
+#include <sys/utsname.h> // uname
 
 #include "ck3fm7.h"
 
-// GtkWindow AdwWindow
-static GObject *w=NULL;
-
-static GResource *g_resources_register2(){
+static inline GResource *g_resources_register2(){
 
   
   GResource *r=j72qkd_get_resource(); _Static_assert(NULL==G_RESOURCE_ERROR_NOT_FOUND, ""); g_assert_true(r);
@@ -31,6 +29,22 @@ static GResource *g_resources_register2(){
 
 }
 
+static inline gboolean isMobile(){
+  struct utsname name={0};
+  g_assert_true(0==uname(&name));
+  g_assert_true(0==g_strcmp0("Linux", name.sysname));
+  gboolean r=FALSE;
+  if(FALSE)
+    g_assert_true(FALSE); // g_assert_not_reached()
+  else if( (0==g_strcmp0("xiaomi-wt88047", name.nodename)) && (0==g_strcmp0("aarch64", name.machine)))
+    r=TRUE;
+  else if( (0==g_strcmp0("820g3",          name.nodename)) && (0==g_strcmp0("x86_64",  name.machine)))
+    r=FALSE;
+  else
+    g_assert_true(FALSE); // g_assert_not_reached()
+  return r;
+}
+
 static void activate_cb(AdwApplication *app){
 
   // get window
@@ -39,16 +53,20 @@ static void activate_cb(AdwApplication *app){
   // g_type_ensure(...);
   // adw_init();
   GtkBuilder *b=gtk_builder_new_from_resource("/com/un1gfn/ck3fm7/b7cj8w.ui"); g_assert_true(b);
-  w=gtk_builder_get_object(b, "tf2fhx"); g_assert_true(w);
-  gtk_window_set_default_size(GTK_WINDOW(w), 720/2, 1200/2);
+  GObject *const w=gtk_builder_get_object(b, "tf2fhx"); g_assert_true(w);
+
+  if(!isMobile()){
+    g_message("not wt88047, resizing...");
+    gtk_window_set_default_size(GTK_WINDOW(w), 720/2, 1000/2);
+  }
 
   // render window
   gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(w));
   g_object_unref(G_OBJECT(b)); b=NULL;
-  // gtk_window_present(GTK_WINDOW(w));
-  gtk_widget_show(GTK_WIDGET(w));
+  gtk_window_present(GTK_WINDOW(w));
+  // gtk_widget_show(GTK_WIDGET(w));
 
-}
+} 
 
 int main(const int argc, char *argv[]){
 
