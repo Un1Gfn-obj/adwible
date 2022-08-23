@@ -51,8 +51,8 @@ static void activate_cb(AdwApplication *app){
   // https://gitlab.gnome.org/GNOME/libadwaita/-/blob/1.1.4/demo/adw-demo-window.c#L118
   // g_type_ensure(...);
   // adw_init();
-  // GtkBuilder *b=gtk_builder_new_from_resource("/com/un1gfn/ck3fm7/b7cj8w.ui"); g_assert_true(b);
-  GtkBuilder *b=gtk_builder_new_from_resource("/com/un1gfn/ck3fm7/w59xv6.ui"); g_assert_true(b);
+  GtkBuilder *b=gtk_builder_new_from_resource("/com/un1gfn/ck3fm7/b7cj8w.ui"); g_assert_true(b);
+  // GtkBuilder *b=gtk_builder_new_from_resource("/com/un1gfn/ck3fm7/w59xv6.ui"); g_assert_true(b);
   GObject *const w=gtk_builder_get_object(b, "tf2fhx"); g_assert_true(w);
 
   // GtkFlowBox no animation
@@ -72,7 +72,7 @@ static void activate_cb(AdwApplication *app){
   // gtk_window_present(GTK_WINDOW(w));
   gtk_widget_show(GTK_WIDGET(w));
 
-} 
+}
 
 int main(const int argc, char *argv[]){
 
