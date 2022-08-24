@@ -28,7 +28,11 @@ static inline gboolean isMobile(){
   return ret;
 }
 
+// static void test_cb(){}
+
 static inline void add_testament(GtkBox *const box, const bc_testament_t *const testament){
+
+  GtkCssProvider *css=gtk_css_provider_new(); g_assert_true(css); gtk_css_provider_load_from_resource(css, "/com/un1gfn/ck3fm7/adwible.css");
 
   // add book groups to testament
   for(const bc_group_t *g=*testament; 0!=g->n_books; ++g){
@@ -44,13 +48,27 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
     for(const bc_book_t *b=g->books; 0!=b->n_chapters; ++b){
 
       GtkWidget *er=adw_expander_row_new(); // AdwExpanderRow
+      adw_expander_row_set_expanded(ADW_EXPANDER_ROW(er), TRUE);
+      {
+        // GtkStyleContext *ct=gtk_widget_get_style_context(GTK_WIDGET(er)); g_assert_true(ct); gtk_style_context_add_provider(ct, GTK_STYLE_PROVIDER(css), GTK_STYLE_PROVIDER_PRIORITY_USER);
+        // row(background-color) > flowbox > flowboxchild
+        // gtk_list_box_row_set_activatable(GTK_LIST_BOX_ROW(er), FALSE);
+        // gtk_list_box_row_set_selectable(GTK_LIST_BOX_ROW(er), FALSE);
+      }
       adw_preferences_row_set_title(ADW_PREFERENCES_ROW(er), b->title);
       adw_expander_row_set_subtitle(ADW_EXPANDER_ROW(er), b->subtitle);
+
       // if(expanded_before_last_exit)
       //   adw_expander_row_set_expanded(ADW_EXPANDER_ROW(er), TRUE);
       adw_preferences_group_add(ADW_PREFERENCES_GROUP(ag), er);
 
       GtkWidget *fb=gtk_flow_box_new(); // GtkFlowBox
+      {
+        GtkStyleContext *ct=gtk_widget_get_style_context(GTK_WIDGET(fb)); g_assert_true(ct); gtk_style_context_add_provider(ct, GTK_STYLE_PROVIDER(css), GTK_STYLE_PROVIDER_PRIORITY_USER);
+        // row(background-color) > flowbox > flowboxchild
+        // gtk_list_box_row_set_activatable(GTK_LIST_BOX_ROW(er), FALSE);
+        // gtk_list_box_row_set_selectable(GTK_LIST_BOX_ROW(er), FALSE);
+      }
       gtk_flow_box_set_max_children_per_line(GTK_FLOW_BOX(fb), 255);
       g_assert_true(1<=b->n_chapters && b->n_chapters<=MAXCHAP);
       for(int i=1; i<=b->n_chapters; ++i){
@@ -59,6 +77,7 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
         gtk_widget_set_hexpand(tb, FALSE);
         gtk_flow_box_append(GTK_FLOW_BOX(fb), tb);
       }
+
 
       adw_expander_row_add_row(ADW_EXPANDER_ROW(er), fb);
 
@@ -114,15 +133,15 @@ void ui_app_activate_cb(AdwApplication *app){
   add_testament(GTK_BOX(box_tanakh), &tanakh);
 
   GObject *const win=gtk_builder_get_object(b, "tf2fhx"); g_assert_true(win);
-  {
+  // {
 
-    GtkCssProvider *css=gtk_css_provider_new(); g_assert_true(css);
-    gtk_css_provider_load_from_resource(css, "/com/un1gfn/ck3fm7/adwible.css");
+  //   GtkCssProvider *css=gtk_css_provider_new(); g_assert_true(css);
+  //   gtk_css_provider_load_from_resource(css, "/com/un1gfn/ck3fm7/adwible.css");
 
-    GtkStyleContext *ct=gtk_widget_get_style_context(GTK_WIDGET(win)); g_assert_true(ct);
-    gtk_style_context_add_provider(ct, GTK_STYLE_PROVIDER(css), GTK_STYLE_PROVIDER_PRIORITY_USER);
+  //   GtkStyleContext *ct=gtk_widget_get_style_context(GTK_WIDGET(win)); g_assert_true(ct);
+  //   gtk_style_context_add_provider(ct, GTK_STYLE_PROVIDER(css), GTK_STYLE_PROVIDER_PRIORITY_USER);
 
-  }
+  // }
   if(!isMobile()){
     g_message("not wt88047, resizing...");
     gtk_window_set_default_size(GTK_WINDOW(win), width, height);
