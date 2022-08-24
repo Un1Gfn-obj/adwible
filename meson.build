@@ -32,7 +32,7 @@ add_global_arguments('-D_GNU_SOURCE',
 # https://mesonbuild.com/Gnome-module.html#gnomecompile_resources
 # pkgdatadir = join_paths(get_option('prefix'), get_option('datadir'), meson.project_name())
 gnome = import('gnome')
-j72qkdresources = gnome.compile_resources('ck3fm7',
+ck3fm7_res = gnome.compile_resources('ck3fm7',
   'rp5gqm.gresource.xml',
   c_name: 'j72qkd',
   gresource_bundle: false,
@@ -40,7 +40,9 @@ j72qkdresources = gnome.compile_resources('ck3fm7',
 
 executable(meson.project_name(),
   'main.c',
-  j72qkdresources,
+  'ui.c',
+  'bc.c',
+  ck3fm7_res,
   dependencies: [
     dependency('gtk4'),
     dependency('libadwaita-1'),

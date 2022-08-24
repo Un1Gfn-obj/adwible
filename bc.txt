@@ -1,0 +1,72 @@
+# REF.BOTH
+# https://app.bible.com/app-ios
+# https://www.biblegateway.com/passage/?search=Genesis+1&version=NLT
+# https://www.biblegateway.com/passage/?search=Genesis+1&version=VULGATE
+
+# REF.OT
+# https://en.wikipedia.org/wiki/Template:Tanakh_OT
+# https://en.wikipedia.org/wiki/Biblical_canon#Table
+# https://en.wikipedia.org/wiki/Old_Testament#Content
+
+# REF.NT
+# https://en.wikipedia.org/wiki/Template:Books_of_the_New_Testament
+# https://en.wikipedia.org/wiki/New_Testament#New_Testament_canons
+# https://en.wikipedia.org/wiki/Biblical_canon#Table_2
+
+# https://la.wikipedia.org/wiki/Novum_Testamentum
+
+[Tanakh/OT]
+
+Pentateuch - Law/Torah
+
+  50 "Genesis"     "Bereshit" 1-, 12-
+  40 "Exodus"      "Shemot"   1-, 20-
+  27 "Leviticus"   "Vayikra"
+  36 "Numbers"     "Bamidbar"
+  34 "Deuteronomy" "Devarim"
+
+Historical - Former Prophets/Nevi'im
+
+  24 "Joshua"       "Yehoshua"
+  21 "Judges"       "Shofetim"
+   4 "Ruth"         "Rut"
+  31 "1 Samuel"     "1 Shemuel"
+  24 "2 Samuel"     "2 Shemuel"
+  22 "1 Kings"      "1 Melakhim"
+  25 "2 Kings"      "2 Melakhim"
+  29 "1 Chronicles" "1 Divrei Hayamim"
+  36 "2 Chronicles" "2 Divrei Hayamim"
+  10 "Ezra"         "."
+  13 "Nehemiah"     "Nəhemyah"
+  10 "Esther"       "Ester"
+
+Wisdom - Ketuvim Poetic Sapiential Writings
+
+  42  "Job"           "Iyov"
+ 150  "Psalms"        "Tehillim"      1-, 42-, 73-, 90-, 107-, 
+  31  "Proverbs"      "Mishlei"
+  12  "Ecclesiastes"  "Qohelet"
+   8  "Song of Songs" "Shir Hashirim"
+
+Major - Latter Prophets/Nevi'im
+
+ 66  "Isaiah"       "Yeshayahu"
+ 52  "Jeremiah"     "Yirmeyahu"
+  5  "Lamentations" "Eikhah"
+ 48  "Ezekiel"      "Yekhezqel"
+ 12  "Daniel"       "Daniyyel"
+
+Minor - Trei Asar
+
+ 14  "Hosea"       "1"
+  3  "Joel"        "2 Yoel"
+  9  "Amos"        "3"
+  1  "Obadiah"     "4 Obadyahu"
+  4  "Jonah"       "5"
+  7  "Micah"       "6 Mikayahu"
+  3  "Nahum"       "7"
+  3  "Habakkuk"    "8"
+  3  "Zephaniah"   "9 Səfanya"
+  2  "Haggai"     "10 Haggay"
+ 14  "Zechariah"  "11 Zəkarya"
+  4  "Malachi"    "12 Malaki"
