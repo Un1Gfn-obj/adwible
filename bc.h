@@ -17,6 +17,7 @@ typedef struct bc_book_s bc_book_t;
 struct bc_group_s {
   const int n_books;
   const char *const title;
+  const char *const description;
   bc_book_t *const books;
 };
 

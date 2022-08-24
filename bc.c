@@ -6,13 +6,14 @@
 #include "bc.h"
 
 #define NULLBOOK 0,NULL,NULL
-#define NULLGRP 0,NULL,NULL
+#define NULLGRP 0,NULL,NULL,NULL
 
 // old testament
 const bc_testament_t tanakh={
   {
     5,
-    "Pentateuch - Law/Torah",
+    "Torah",
+    "Law Pentateuch",
     (bc_book_t[]){
       { 50 , "Genesis"     , "Bereshit" }, // 1-, 12-
       { 40 , "Exodus"      , "Shemot"   }, // 1-, 20-
@@ -24,7 +25,8 @@ const bc_testament_t tanakh={
   },
   {
     12,
-    "Historical - Former Prophets/Nevi'im",
+    "Former",
+    "Prophets/Nevi'im Historical",
     (bc_book_t[]){
       { 24 , "Joshua"       , "Yehoshua"         },
       { 21 , "Judges"       , "Shofetim"         },
@@ -43,7 +45,8 @@ const bc_testament_t tanakh={
   },
   {
     5,
-    "Wisdom - Ketuvim Poetic Sapiential Writings",
+    "Ketuvim",
+    "Wisdom Poetic Sapiential",
     (bc_book_t[]){
       {  42 , "Job"           , "Iyov"           },
       { 150 , "Psalms"        , "Tehillim"       }, // 1-, 42-, 73-, 90-, 107-, 
@@ -55,7 +58,8 @@ const bc_testament_t tanakh={
   },
   {
     5,
-    "Major - Latter Prophets/Nevi'im",
+    "Major",
+    "Prophets/Nevi'im Latter",
     (bc_book_t[]){
       { 66 , "Isaiah"       , "Yeshayahu" },
       { 52 , "Jeremiah"     , "Yirmeyahu" },
@@ -67,7 +71,8 @@ const bc_testament_t tanakh={
   },
   {
     12,
-    "Minor - Trei Asar",
+    "Minor",
+    "Trei Asar",
     (bc_book_t[]){
       { 14 , "Hosea"     ,  "1"          },
       {  3 , "Joel"      ,  "2 Yoel"     },

@@ -1,5 +1,8 @@
 #pragma once
 
-void g_resources_register2();
-void app_activate_cb(AdwApplication*);
-void g_resources_unregister2();
+#include <adwaita.h> // AdwApplication*
+
+void ui_init_lb();
+void ui_register_gres();
+void ui_app_activate_cb(AdwApplication*);
+void ui_unregister_gres();
