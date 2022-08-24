@@ -30,16 +30,17 @@ static inline gboolean isMobile(){
 
 static inline void add_testament(GtkBox *const box, const bc_testament_t *const testament){
 
+  // add book groups to testament
   for(const bc_group_t *g=*testament; 0!=g->n_books; ++g){
 
     GtkWidget *ag=adw_preferences_group_new(); // AdwPreferencesGroup
-
     // GValue v=G_VALUE_INIT; g_assert_true(&v==g_value_init(&v, G_TYPE_STRING));
     // g_value_set_static_string(&v, g->title); g_assert_true(G_VALUE_HOLDS_STRING(&v));
     // g_object_set_property(G_OBJECT(ag), "title", &v);
     adw_preferences_group_set_title(ADW_PREFERENCES_GROUP(ag), g->title);
     adw_preferences_group_set_description(ADW_PREFERENCES_GROUP(ag), g->description);
 
+    // add books to book group
     for(const bc_book_t *b=g->books; 0!=b->n_chapters; ++b){
 
       GtkWidget *er=adw_expander_row_new(); // AdwExpanderRow
@@ -63,6 +64,7 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
 
     }
 
+    // add testment to GtkBox in GtkScrolledWindow
     gtk_box_append(box, ag);
 
   }
@@ -111,14 +113,23 @@ void ui_app_activate_cb(AdwApplication *app){
   GObject *const box_tanakh=gtk_builder_get_object(b, "qgnxl8"); g_assert_true(box_tanakh);
   add_testament(GTK_BOX(box_tanakh), &tanakh);
 
-  GObject *const w=gtk_builder_get_object(b, "tf2fhx"); g_assert_true(w);
+  GObject *const win=gtk_builder_get_object(b, "tf2fhx"); g_assert_true(win);
+  {
+
+    GtkCssProvider *css=gtk_css_provider_new(); g_assert_true(css);
+    gtk_css_provider_load_from_resource(css, "/com/un1gfn/ck3fm7/adwible.css");
+
+    GtkStyleContext *ct=gtk_widget_get_style_context(GTK_WIDGET(win)); g_assert_true(ct);
+    gtk_style_context_add_provider(ct, GTK_STYLE_PROVIDER(css), GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+  }
   if(!isMobile()){
     g_message("not wt88047, resizing...");
-    gtk_window_set_default_size(GTK_WINDOW(w), width, height);
+    gtk_window_set_default_size(GTK_WINDOW(win), width, height);
   }
-  gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(w));
+  gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(win));
   g_object_unref(G_OBJECT(b)); b=NULL;
-  gtk_widget_show(GTK_WIDGET(w)); // gtk_window_present(GTK_WINDOW(w));
+  gtk_widget_show(GTK_WIDGET(win)); // gtk_window_present(GTK_WINDOW(win));
 
   // GtkFlowBox no animation
   // GObject *const fb=gtk_builder_get_object(b, "dx7fws"); g_assert_true(fb);

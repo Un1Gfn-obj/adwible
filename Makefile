@@ -1,4 +1,4 @@
-O:=builddir
+O:=builddir.$(shell uname -m)
 N:=ninja -j4 -v -C $(O)
 # DEBUGINFOD_TIMEOUT=0
 # G_DEBUG=fatal-warnings
@@ -11,7 +11,7 @@ VL:=/tmp/valgrind.log
 default: b
 
 # postbuild.transfer
-t: $(O)/adwible
+t: builddir.aarch64/adwible
 	ssh user@wt88047usb rm -fv /tmp/$^
 	scp $^ user@wt88047usb:/tmp/
 
@@ -44,8 +44,8 @@ $(O):
 # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Makefile?h=v5.19#n1561
 clean:
 	{ [ -e $(O) ] && $(N) -t clean; } || true
-	@rm -fv cscope.out
+	rm -fv cscope.out
 mrproper:
-	@rm -rfv $(O)/
+	rm -rfv $(O)/
 distclean:
-	@rm -rfv $(O)/
+	rm -rfv $(O)/
