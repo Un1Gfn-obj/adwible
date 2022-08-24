@@ -3,6 +3,7 @@
 #include <glib.h> // g_assert_true
 
 #include "ui.h"
+#include "bc.h"
 
 #define ARGPARA const int argc, char *argv[]
 #define ARGPASS argc, argv
@@ -17,12 +18,17 @@ int g_application_run2(ARGPARA){
 
 int main(ARGPARA){
 
+  // init
+  bc_validate();
   g_resources_register2();
 
+  // spawn
   const int e=g_application_run2(ARGPASS);
 
+  // cleanup
   g_resources_unregister2();
 
+  // exit
   return e;
 
 }
