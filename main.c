@@ -16,7 +16,7 @@ static inline GResource *g_resources_register2(){
 
   // gsize size=0;
   // guint32 flags=0;
-  // g_assert_true(g_resource_get_info(r, "/com/un1gfn/ck3fm7/b7cj8w.ui", G_RESOURCE_LOOKUP_FLAGS_NONE, &size, &flags, NULL));
+  // g_assert_true(g_resource_get_info(r, "/com/un1gfn/ck3fm7/adwible.ui.ui", G_RESOURCE_LOOKUP_FLAGS_NONE, &size, &flags, NULL));
   // g_assert_true(0==flags);
   // g_print("%zu bytes\n", size);
 
@@ -51,10 +51,10 @@ static void activate_cb(AdwApplication *app){
   // g_type_ensure(...);
   // adw_init();
   GtkBuilder *x[]={
-    gtk_builder_new_from_resource("/com/un1gfn/ck3fm7/w59xv6.ui"), // adwdemo.list
-    gtk_builder_new_from_resource("/com/un1gfn/ck3fm7/b7cj8w.ui"), // adwible
+    gtk_builder_new_from_resource("/com/un1gfn/ck3fm7/adwible.ui"),
+    gtk_builder_new_from_resource("/com/un1gfn/ck3fm7/demo.ui"),
   };
-  _Static_assert(sizeof(x)==2*sizeof(void*));
+  // _Static_assert(sizeof(x)==2*sizeof(void*));
   for(gsize i=0; i<sizeof(x)/sizeof(void*); ++i){
     GtkBuilder *b=x[i];
     g_assert_true(b);

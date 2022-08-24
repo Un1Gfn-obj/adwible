@@ -33,7 +33,7 @@ add_global_arguments('-D_GNU_SOURCE',
 # pkgdatadir = join_paths(get_option('prefix'), get_option('datadir'), meson.project_name())
 gnome = import('gnome')
 j72qkdresources = gnome.compile_resources('ck3fm7',
-  'ck3fm7.gresource.xml',
+  'rp5gqm.gresource.xml',
   c_name: 'j72qkd',
   gresource_bundle: false,
 )
