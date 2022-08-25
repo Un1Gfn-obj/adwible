@@ -8,7 +8,12 @@
 
 #define MAXCHAP 150
 
-static GResource *r=NULL;
+static gboolean dark=FALSE;
+
+static GResource *gres=NULL;
+static GtkCssProvider *css_row_dark=NULL;
+static GtkCssProvider *css_row_light=NULL;
+GtkBuilder *builder=NULL;
 
 static char lb[1+150][3+1]={0};
 
@@ -32,8 +37,6 @@ static inline gboolean isMobile(){
 
 static inline void add_testament(GtkBox *const box, const bc_testament_t *const testament){
 
-  GtkCssProvider *css=gtk_css_provider_new(); g_assert_true(css); gtk_css_provider_load_from_resource(css, "/com/un1gfn/ck3fm7/adwible.css");
-
   // add book groups to testament
   for(const bc_group_t *g=*testament; 0!=g->n_books; ++g){
 
@@ -48,13 +51,7 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
     for(const bc_book_t *b=g->books; 0!=b->n_chapters; ++b){
 
       GtkWidget *er=adw_expander_row_new(); // AdwExpanderRow
-      adw_expander_row_set_expanded(ADW_EXPANDER_ROW(er), TRUE);
-      {
-        // GtkStyleContext *ct=gtk_widget_get_style_context(GTK_WIDGET(er)); g_assert_true(ct); gtk_style_context_add_provider(ct, GTK_STYLE_PROVIDER(css), GTK_STYLE_PROVIDER_PRIORITY_USER);
-        // row(background-color) > flowbox > flowboxchild
-        // gtk_list_box_row_set_activatable(GTK_LIST_BOX_ROW(er), FALSE);
-        // gtk_list_box_row_set_selectable(GTK_LIST_BOX_ROW(er), FALSE);
-      }
+      // adw_expander_row_set_expanded(ADW_EXPANDER_ROW(er), TRUE);
       adw_preferences_row_set_title(ADW_PREFERENCES_ROW(er), b->title);
       adw_expander_row_set_subtitle(ADW_EXPANDER_ROW(er), b->subtitle);
 
@@ -64,10 +61,56 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
 
       GtkWidget *fb=gtk_flow_box_new(); // GtkFlowBox
       {
-        GtkStyleContext *ct=gtk_widget_get_style_context(GTK_WIDGET(fb)); g_assert_true(ct); gtk_style_context_add_provider(ct, GTK_STYLE_PROVIDER(css), GTK_STYLE_PROVIDER_PRIORITY_USER);
+
         // row(background-color) > flowbox > flowboxchild
         // gtk_list_box_row_set_activatable(GTK_LIST_BOX_ROW(er), FALSE);
         // gtk_list_box_row_set_selectable(GTK_LIST_BOX_ROW(er), FALSE);
+
+        // GtkStyleContext *const styct=gtk_widget_get_style_context(GTK_WIDGET(fb)); g_assert_true(styct);
+
+        // g_assert_true(GTK_STATE_FLAG_DIR_LTR==gtk_style_context_get_state(styct));
+        // GdkRGBA color={0}; gtk_style_context_get_color(styct, &color);
+        // g_assert_true(gdk_rgba_equal(&(GdkRGBA){1.0f, 1.0f, 1.0f, 1.0f}, &color));
+
+        // gtk_style_context_lookup_color(styct, "theme_bg_color", &color);
+        // g_print("bg rgbaF(%f, %f, %f, %f)\n", color.red, color.green, color.blue, color.alpha);
+
+        // gtk_style_context_lookup_color(styct, "theme_selected_bg_color", &color);
+        // g_print("bg sel rgba(%.3f, %.3f, %.3f, %.3f)\n", color.red, color.green, color.blue, color.alpha);
+
+        // gtk_style_context_lookup_color(styct, "black", &color);
+        // g_print("black  rgba(%.3f, %.3f, %.3f, %.3f)\n", color.red, color.green, color.blue, color.alpha);
+        // gtk_style_context_lookup_color(styct, "white", &color);
+        // g_print("white  rgba(%.3f, %.3f, %.3f, %.3f)\n", color.red, color.green, color.blue, color.alpha);
+
+        // char *s=gtk_style_context_to_string(styct, GTK_STYLE_CONTEXT_PRINT_NONE); g_assert_true(s);
+        // char *s=gtk_style_context_to_string(styct, GTK_STYLE_CONTEXT_PRINT_RECURSE); g_assert_true(s);
+        // char *s=gtk_style_context_to_string(styct, GTK_STYLE_CONTEXT_PRINT_SHOW_STYLE); g_assert_true(s);
+        // char *s=gtk_style_context_to_string(styct, GTK_STYLE_CONTEXT_PRINT_SHOW_CHANGE); g_assert_true(s);
+        // g_print("%s\n", s);
+        // g_free(s);
+
+        // GtkStateFlags flags[]={
+        //   GTK_STATE_FLAG_NORMAL,
+        //   GTK_STATE_FLAG_ACTIVE,
+        //   GTK_STATE_FLAG_PRELIGHT,
+        //   GTK_STATE_FLAG_SELECTED,
+        //   GTK_STATE_FLAG_INSENSITIVE,
+        //   GTK_STATE_FLAG_INCONSISTENT,
+        //   GTK_STATE_FLAG_FOCUSED,
+        //   GTK_STATE_FLAG_BACKDROP,
+        //   GTK_STATE_FLAG_DIR_LTR,
+        //   GTK_STATE_FLAG_DIR_RTL,
+        //   GTK_STATE_FLAG_LINK,
+        //   GTK_STATE_FLAG_VISITED,
+        //   GTK_STATE_FLAG_CHECKED,
+        //   GTK_STATE_FLAG_DROP_ACTIVE
+        // }
+
+        // for(int i=0; i<sizeof(flags)/sizeof(GtkStateFlags); ++i){
+        //   GdkRGBA color={0}
+        //   gtk_style_context_get_background_color(styct, flags[i],GdkRGBA* color)
+
       }
       gtk_flow_box_set_max_children_per_line(GTK_FLOW_BOX(fb), 255);
       g_assert_true(1<=b->n_chapters && b->n_chapters<=MAXCHAP);
@@ -78,8 +121,16 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
         gtk_flow_box_append(GTK_FLOW_BOX(fb), tb);
       }
 
-
       adw_expander_row_add_row(ADW_EXPANDER_ROW(er), fb);
+      {
+        GtkWidget *const row=gtk_widget_get_parent(fb);
+        g_assert_true(g_type_check_instance_is_a((gpointer)row, gtk_list_box_row_get_type()));
+        GtkStyleContext *const styct=gtk_widget_get_style_context(row); g_assert_true(styct);
+        if(dark)
+          gtk_style_context_add_provider(styct, GTK_STYLE_PROVIDER(css_row_dark), GTK_STYLE_PROVIDER_PRIORITY_USER); // apply css
+        else
+          gtk_style_context_add_provider(styct, GTK_STYLE_PROVIDER(css_row_light), GTK_STYLE_PROVIDER_PRIORITY_USER); // apply css
+      }
 
     }
 
@@ -87,6 +138,14 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
     gtk_box_append(box, ag);
 
   }
+}
+
+void ui_init_theme(){
+  AdwStyleManager *const mgm=adw_style_manager_get_default();
+  g_assert_true(adw_style_manager_get_system_supports_color_schemes(mgm));
+  g_assert_true(ADW_COLOR_SCHEME_DEFAULT==adw_style_manager_get_color_scheme(mgm)); // g_print("%d\n", adw_style_manager_get_color_scheme(mgm));
+  dark=adw_style_manager_get_dark(mgm);
+  // adw_style_manager_set_color_scheme(mgm, ADW_COLOR_SCHEME_FORCE_DARK); g_assert_true(ADW_COLOR_SCHEME_FORCE_DARK==adw_style_manager_get_color_scheme(mgm));
 }
 
 void ui_init_lb(){
@@ -127,31 +186,19 @@ void ui_app_activate_cb(AdwApplication *app){
   // _Static_assert(sizeof(x)==2*sizeof(void*));
   // for(gsize i=0; i<sizeof(x)/sizeof(void*); ++i){
 
-  GtkBuilder *b=gtk_builder_new_from_resource("/com/un1gfn/ck3fm7/adwible.ui"); g_assert_true(b);
-
-  GObject *const box_tanakh=gtk_builder_get_object(b, "qgnxl8"); g_assert_true(box_tanakh);
+  GObject *const box_tanakh=gtk_builder_get_object(builder, "qgnxl8"); g_assert_true(box_tanakh);
   add_testament(GTK_BOX(box_tanakh), &tanakh);
 
-  GObject *const win=gtk_builder_get_object(b, "tf2fhx"); g_assert_true(win);
-  // {
-
-  //   GtkCssProvider *css=gtk_css_provider_new(); g_assert_true(css);
-  //   gtk_css_provider_load_from_resource(css, "/com/un1gfn/ck3fm7/adwible.css");
-
-  //   GtkStyleContext *ct=gtk_widget_get_style_context(GTK_WIDGET(win)); g_assert_true(ct);
-  //   gtk_style_context_add_provider(ct, GTK_STYLE_PROVIDER(css), GTK_STYLE_PROVIDER_PRIORITY_USER);
-
-  // }
+  GObject *const win=gtk_builder_get_object(builder, "tf2fhx"); g_assert_true(win);
   if(!isMobile()){
     g_message("not wt88047, resizing...");
     gtk_window_set_default_size(GTK_WINDOW(win), width, height);
   }
   gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(win));
-  g_object_unref(G_OBJECT(b)); b=NULL;
   gtk_widget_show(GTK_WIDGET(win)); // gtk_window_present(GTK_WINDOW(win));
 
   // GtkFlowBox no animation
-  // GObject *const fb=gtk_builder_get_object(b, "dx7fws"); g_assert_true(fb);
+  // GObject *const fb=gtk_builder_get_object(builder, "dx7fws"); g_assert_true(fb);
   // gulong signalID=g_signal_lookup("child-activated", gtk_flow_box_get_type());
   // g_assert_true(1<signalID && signalID<(gulong)(-2));
   // g_assert_true(0==g_signal_handlers_disconnect_matched(fb, G_SIGNAL_MATCH_ID, signalID, 0, NULL, NULL, NULL));
@@ -160,31 +207,38 @@ void ui_app_activate_cb(AdwApplication *app){
 
 void ui_register_gres(){
 
-  g_assert_true(!r);
-  r=j72qkd_get_resource();
-  _Static_assert(NULL==G_RESOURCE_ERROR_NOT_FOUND, ""); g_assert_true(r);
+  g_assert_true(!gres);
+  gres=j72qkd_get_resource();
+  _Static_assert(NULL==G_RESOURCE_ERROR_NOT_FOUND, ""); g_assert_true(gres);
 
   // const char *path="/com/un1gfn/ck3fm7";
   // g_print("%s\n", path);
-  // char **cs=g_resource_enumerate_children(r, path, G_RESOURCE_LOOKUP_FLAGS_NONE, NULL); g_assert_true(cs);
+  // char **cs=g_resource_enumerate_children(gres, path, G_RESOURCE_LOOKUP_FLAGS_NONE, NULL); g_assert_true(cs);
   // for(char **c=cs; *c; ++c)
   //   g_print("%s/%s\n", path, *c);
   // g_strfreev(cs); cs=NULL;
 
   // gsize size=0;
   // guint32 flags=0;
-  // g_assert_true(g_resource_get_info(r, "/com/un1gfn/ck3fm7/adwible.ui.ui", G_RESOURCE_LOOKUP_FLAGS_NONE, &size, &flags, NULL));
+  // g_assert_true(g_resource_get_info(gres, "/com/un1gfn/ck3fm7/adwible.ui.ui", G_RESOURCE_LOOKUP_FLAGS_NONE, &size, &flags, NULL));
   // g_assert_true(0==flags);
   // g_print("%zu bytes\n", size);
 
   // binary dump
   // g_resource_lookup_data()
 
-  g_resources_register(r);
+  g_resources_register(gres);
+  builder=gtk_builder_new_from_resource("/com/un1gfn/ck3fm7/adwible.ui"); g_assert_true(builder);
+  css_row_dark=gtk_css_provider_new(); g_assert_true(css_row_dark); gtk_css_provider_load_from_resource(css_row_dark, "/com/un1gfn/ck3fm7/row-dark.css");
+  css_row_light=gtk_css_provider_new(); g_assert_true(css_row_light); gtk_css_provider_load_from_resource(css_row_light, "/com/un1gfn/ck3fm7/row-light.css");
+  // css_flowbox=gtk_css_provider_new(); g_assert_true(css_flowbox); gtk_css_provider_load_from_resource(css_flowbox, "/com/un1gfn/ck3fm7/flowbox.css");
 
 }
 
 void ui_unregister_gres(){
-  g_resources_unregister(r); r=NULL;
-  // g_resource_unref(r); // double free // valgrind "Invalid read of size 4"
+  g_object_unref(G_OBJECT(css_row_dark)); css_row_dark=NULL;
+  g_object_unref(G_OBJECT(css_row_light)); css_row_light=NULL;
+  g_object_unref(G_OBJECT(builder)); builder=NULL;
+  g_resources_unregister(gres); gres=NULL;
+  // g_resource_unref(gres); // double free // valgrind "Invalid read of size 4"
 }

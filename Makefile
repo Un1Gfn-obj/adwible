@@ -4,7 +4,8 @@ N:=ninja -j4 -v -C $(O)
 # G_DEBUG=fatal-warnings
 # debuginfo(8)
 # GOBJECT_DEBUG=instance-count 
-E:=env HTTPS_PROXY=http://127.0.0.1:8080/ DEBUGINFOD_URLS="/dev/null"
+E:=HTTPS_PROXY=http://127.0.0.1:8080/ 
+NODOWNLOAD:=DEBUGINFOD_URLS="/dev/null"
 V:=/bin/valgrind -v --keep-debuginfo=yes --leak-check=full --suppressions=/usr/share/gtk-4.0/valgrind/gtk.supp
 VL:=/tmp/valgrind.log
 
@@ -20,7 +21,11 @@ t: builddir.aarch64/adwible
 v: b
 	@echo ":; less -SRM +% -p 'HEAP SUMMARY' /tmp/valgrind.log"
 	@echo ":; tail -f -c +0 $(VL)"
-	$(E) $(V) --log-file=$(VL) $(O)/adwible
+	$(E) $(NODOWNLOAD) $(V) --log-file=$(VL) $(O)/adwible
+
+# postbuild.gdb
+g: b
+	$(E) gdb $(O)/adwible
 
 # postbuild.run
 r: b

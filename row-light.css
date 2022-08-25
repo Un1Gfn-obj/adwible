@@ -1,0 +1,4 @@
+/* active 0.064 */
+row, row:active {
+	background-color: rgba(0, 0, 0, 0.024);
+}

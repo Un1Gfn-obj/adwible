@@ -19,6 +19,8 @@ int g_application_run2(ARGPARA){
 int main(ARGPARA){
 
   // init
+  adw_init();
+  ui_init_theme();
   ui_init_lb();
   bc_validate();
   ui_register_gres();
