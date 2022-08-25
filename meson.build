@@ -42,6 +42,7 @@ executable(meson.project_name(),
   'main.c',
   'ui.c',
   'bc.c',
+  'bs.c',
   ck3fm7_res,
   dependencies: [
     dependency('gtk4'),

@@ -4,18 +4,17 @@
 #include <sys/utsname.h> // uname
 
 #include "ck3fm7.h" // j72qkd_get_resource
-#include "bc.h"
+#include "bc.h" // biblical canon
+#include "bs.h" // bitset
 
 #define MAXCHAP 150
 
+static char lb[1+150][3+1]={0};
 static gboolean dark=FALSE;
-
 static GResource *gres=NULL;
 static GtkCssProvider *css_row_dark=NULL;
 static GtkCssProvider *css_row_light=NULL;
 GtkBuilder *builder=NULL;
-
-static char lb[1+150][3+1]={0};
 
 static inline gboolean isMobile(){
   struct utsname name={0};
@@ -45,10 +44,24 @@ static inline void click_keep_bg(GtkWidget *const widget){
     gtk_style_context_add_provider(styct, GTK_STYLE_PROVIDER(css_row_light), GTK_STYLE_PROVIDER_PRIORITY_USER); // apply css
 }
 
+static void toggle_cb(/*__attribute__((unused)) */GtkToggleButton* self, gpointer user_data){
+  // g_assert_true(user_data);
+  // const glong n=*((glong*)user_data); g_assert_true(1<=n);
+  const glong n=(glong)user_data; g_assert_true(1<=n && n<=tanakh.n_total_chapters);
+  // g_message("GtkToggleButton::toggled [%ld]", n);
+
+  bs_toggle(bs_tanakh, n, gtk_toggle_button_get_active(self));
+  g_message("GtkToggleButton::toggled [%ld] ?->%s", n, gtk_toggle_button_get_active(self)?"O":".");
+  
+}
+
 static inline void add_testament(GtkBox *const box, const bc_testament_t *const testament){
 
+  _Static_assert(sizeof(gpointer)==sizeof(glong));
+  glong cur_chapter=0;
+
   // add book groups to testament
-  for(const bc_group_t *g=*testament; 0!=g->n_books; ++g){
+  for(const bc_group_t *g=testament->groups; 0!=g->n_books; ++g){
 
     GtkWidget *ag=adw_preferences_group_new(); // AdwPreferencesGroup
     // GValue v=G_VALUE_INIT;
@@ -81,6 +94,9 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
         GtkWidget *tb=gtk_toggle_button_new_with_label(lb[i]); // GtkToggleButton
         gtk_widget_set_halign(tb, GTK_ALIGN_FILL);
         gtk_widget_set_hexpand(tb, FALSE);
+        ++cur_chapter;
+        // g_signal_connect(tb, "toggled", G_CALLBACK(toggle_cb),&(int){cur_chapter}); // error - invalid read
+        g_signal_connect(tb, "toggled", G_CALLBACK(toggle_cb),(gpointer)cur_chapter);
         // add a chapter to a book
         gtk_flow_box_append(GTK_FLOW_BOX(fb), tb);
       }

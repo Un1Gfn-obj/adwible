@@ -3,7 +3,8 @@
 #include <glib.h> // g_assert_true
 
 #include "ui.h"
-#include "bc.h"
+#include "bc.h" // biblical canon
+#include "bs.h" // bitset
 
 #define ARGPARA const int argc, char *argv[]
 #define ARGPASS argc, argv
@@ -22,14 +23,18 @@ int main(ARGPARA){
   adw_init();
   ui_init_theme();
   ui_init_lb();
-  bc_validate();
   ui_register_gres();
+  bc_init();
+
+  bs_init();
+  bs_tanakh=bs_new(tanakh.n_total_chapters+1);
 
   // spawn
   const int e=g_application_run2(ARGPASS);
 
   // cleanup
   ui_unregister_gres();
+  bs_free(bs_tanakh); bs_tanakh=NULL;
 
   // exit
   return e;
