@@ -2,7 +2,6 @@
 <gresources>
   <gresource prefix="/com/un1gfn/ck3fm7"><file>adwible.ui</file></gresource>
   <gresource prefix="/com/un1gfn/ck3fm7"><file>demo.ui</file></gresource>
-  <gresource prefix="/com/un1gfn/ck3fm7"><file>flowbox.css</file></gresource>
   <gresource prefix="/com/un1gfn/ck3fm7"><file>row-dark.css</file></gresource>
   <gresource prefix="/com/un1gfn/ck3fm7"><file>row-light.css</file></gresource>
 </gresources>

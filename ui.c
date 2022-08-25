@@ -33,7 +33,17 @@ static inline gboolean isMobile(){
   return ret;
 }
 
-// static void test_cb(){}
+static inline void click_keep_bg(GtkWidget *const widget){
+  GtkStyleContext *const styct=gtk_widget_get_style_context(widget); g_assert_true(styct); g_assert_true(GTK_STATE_FLAG_DIR_LTR==gtk_style_context_get_state(styct));
+  // gtk_style_context_lookup_color(styct, "theme_bg_color", &color);
+  // gtk_style_context_lookup_color(styct, "theme_selected_bg_color", &color);
+  // gtk_style_context_to_string()
+  // g_print("rgba(%.3f, %.3f, %.3f, %.3f)\n", color.red, color.green, color.blue, color.alpha);
+  if(dark)
+    gtk_style_context_add_provider(styct, GTK_STYLE_PROVIDER(css_row_dark), GTK_STYLE_PROVIDER_PRIORITY_USER); // apply css
+  else
+    gtk_style_context_add_provider(styct, GTK_STYLE_PROVIDER(css_row_light), GTK_STYLE_PROVIDER_PRIORITY_USER); // apply css
+}
 
 static inline void add_testament(GtkBox *const box, const bc_testament_t *const testament){
 
@@ -41,100 +51,47 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
   for(const bc_group_t *g=*testament; 0!=g->n_books; ++g){
 
     GtkWidget *ag=adw_preferences_group_new(); // AdwPreferencesGroup
-    // GValue v=G_VALUE_INIT; g_assert_true(&v==g_value_init(&v, G_TYPE_STRING));
+    // GValue v=G_VALUE_INIT;
+    // GValue v={0}; g_assert_true(&v==g_value_init(&v, G_TYPE_STRING));
     // g_value_set_static_string(&v, g->title); g_assert_true(G_VALUE_HOLDS_STRING(&v));
     // g_object_set_property(G_OBJECT(ag), "title", &v);
     adw_preferences_group_set_title(ADW_PREFERENCES_GROUP(ag), g->title);
     adw_preferences_group_set_description(ADW_PREFERENCES_GROUP(ag), g->description);
 
-    // add books to book group
+    // add books to a book group
     for(const bc_book_t *b=g->books; 0!=b->n_chapters; ++b){
 
       GtkWidget *er=adw_expander_row_new(); // AdwExpanderRow
-      // adw_expander_row_set_expanded(ADW_EXPANDER_ROW(er), TRUE);
       adw_preferences_row_set_title(ADW_PREFERENCES_ROW(er), b->title);
-      adw_expander_row_set_subtitle(ADW_EXPANDER_ROW(er), b->subtitle);
-
+      if(b->subtitle) adw_expander_row_set_subtitle(ADW_EXPANDER_ROW(er), b->subtitle);
       // if(expanded_before_last_exit)
       //   adw_expander_row_set_expanded(ADW_EXPANDER_ROW(er), TRUE);
+
+      // add a book to a book group
       adw_preferences_group_add(ADW_PREFERENCES_GROUP(ag), er);
 
       GtkWidget *fb=gtk_flow_box_new(); // GtkFlowBox
-      {
-
-        // row(background-color) > flowbox > flowboxchild
-        // gtk_list_box_row_set_activatable(GTK_LIST_BOX_ROW(er), FALSE);
-        // gtk_list_box_row_set_selectable(GTK_LIST_BOX_ROW(er), FALSE);
-
-        // GtkStyleContext *const styct=gtk_widget_get_style_context(GTK_WIDGET(fb)); g_assert_true(styct);
-
-        // g_assert_true(GTK_STATE_FLAG_DIR_LTR==gtk_style_context_get_state(styct));
-        // GdkRGBA color={0}; gtk_style_context_get_color(styct, &color);
-        // g_assert_true(gdk_rgba_equal(&(GdkRGBA){1.0f, 1.0f, 1.0f, 1.0f}, &color));
-
-        // gtk_style_context_lookup_color(styct, "theme_bg_color", &color);
-        // g_print("bg rgbaF(%f, %f, %f, %f)\n", color.red, color.green, color.blue, color.alpha);
-
-        // gtk_style_context_lookup_color(styct, "theme_selected_bg_color", &color);
-        // g_print("bg sel rgba(%.3f, %.3f, %.3f, %.3f)\n", color.red, color.green, color.blue, color.alpha);
-
-        // gtk_style_context_lookup_color(styct, "black", &color);
-        // g_print("black  rgba(%.3f, %.3f, %.3f, %.3f)\n", color.red, color.green, color.blue, color.alpha);
-        // gtk_style_context_lookup_color(styct, "white", &color);
-        // g_print("white  rgba(%.3f, %.3f, %.3f, %.3f)\n", color.red, color.green, color.blue, color.alpha);
-
-        // char *s=gtk_style_context_to_string(styct, GTK_STYLE_CONTEXT_PRINT_NONE); g_assert_true(s);
-        // char *s=gtk_style_context_to_string(styct, GTK_STYLE_CONTEXT_PRINT_RECURSE); g_assert_true(s);
-        // char *s=gtk_style_context_to_string(styct, GTK_STYLE_CONTEXT_PRINT_SHOW_STYLE); g_assert_true(s);
-        // char *s=gtk_style_context_to_string(styct, GTK_STYLE_CONTEXT_PRINT_SHOW_CHANGE); g_assert_true(s);
-        // g_print("%s\n", s);
-        // g_free(s);
-
-        // GtkStateFlags flags[]={
-        //   GTK_STATE_FLAG_NORMAL,
-        //   GTK_STATE_FLAG_ACTIVE,
-        //   GTK_STATE_FLAG_PRELIGHT,
-        //   GTK_STATE_FLAG_SELECTED,
-        //   GTK_STATE_FLAG_INSENSITIVE,
-        //   GTK_STATE_FLAG_INCONSISTENT,
-        //   GTK_STATE_FLAG_FOCUSED,
-        //   GTK_STATE_FLAG_BACKDROP,
-        //   GTK_STATE_FLAG_DIR_LTR,
-        //   GTK_STATE_FLAG_DIR_RTL,
-        //   GTK_STATE_FLAG_LINK,
-        //   GTK_STATE_FLAG_VISITED,
-        //   GTK_STATE_FLAG_CHECKED,
-        //   GTK_STATE_FLAG_DROP_ACTIVE
-        // }
-
-        // for(int i=0; i<sizeof(flags)/sizeof(GtkStateFlags); ++i){
-        //   GdkRGBA color={0}
-        //   gtk_style_context_get_background_color(styct, flags[i],GdkRGBA* color)
-
-      }
       gtk_flow_box_set_max_children_per_line(GTK_FLOW_BOX(fb), 255);
+      gtk_list_box_row_set_selectable(GTK_LIST_BOX_ROW(er), FALSE);
+      // gtk_list_box_row_set_activatable(GTK_LIST_BOX_ROW(er), FALSE);
+
+      // add chapters to a book
       g_assert_true(1<=b->n_chapters && b->n_chapters<=MAXCHAP);
       for(int i=1; i<=b->n_chapters; ++i){
         GtkWidget *tb=gtk_toggle_button_new_with_label(lb[i]); // GtkToggleButton
         gtk_widget_set_halign(tb, GTK_ALIGN_FILL);
         gtk_widget_set_hexpand(tb, FALSE);
+        // add a chapter to a book
         gtk_flow_box_append(GTK_FLOW_BOX(fb), tb);
       }
-
       adw_expander_row_add_row(ADW_EXPANDER_ROW(er), fb);
-      {
-        GtkWidget *const row=gtk_widget_get_parent(fb);
-        g_assert_true(g_type_check_instance_is_a((gpointer)row, gtk_list_box_row_get_type()));
-        GtkStyleContext *const styct=gtk_widget_get_style_context(row); g_assert_true(styct);
-        if(dark)
-          gtk_style_context_add_provider(styct, GTK_STYLE_PROVIDER(css_row_dark), GTK_STYLE_PROVIDER_PRIORITY_USER); // apply css
-        else
-          gtk_style_context_add_provider(styct, GTK_STYLE_PROVIDER(css_row_light), GTK_STYLE_PROVIDER_PRIORITY_USER); // apply css
-      }
+      GtkWidget *const row=gtk_widget_get_parent(fb);
+      g_assert_true(g_type_check_instance_is_a((gpointer)row, gtk_list_box_row_get_type()));
+      click_keep_bg(row);
 
     }
 
-    // add testment to GtkBox in GtkScrolledWindow
+    // add a testment to GtkBox in GtkScrolledWindow
     gtk_box_append(box, ag);
 
   }

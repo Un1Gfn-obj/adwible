@@ -1,7 +1,7 @@
 // biblical canon
 
+// #include <stddef.h> // NULL
 #include <glib.h> // g_assert_true
-#include <stddef.h> // NULL
 
 #include "bc.h"
 
@@ -37,7 +37,7 @@ const bc_testament_t tanakh={
       { 25 , "2 Kings"      , "2 Melakhim"       },
       { 29 , "1 Chronicles" , "1 Divrei Hayamim" },
       { 36 , "2 Chronicles" , "2 Divrei Hayamim" },
-      { 10 , "Ezra"         , "."                },
+      { 10 , "Ezra"         , NULL               },
       { 13 , "Nehemiah"     , "Nəhemyah"         },
       { 10 , "Esther"       , "Ester"            },
       { NULLBOOK }
@@ -74,18 +74,18 @@ const bc_testament_t tanakh={
     "Minor",
     "Trei Asar",
     (bc_book_t[]){
-      { 14 , "Hosea"     ,  "1"          },
-      {  3 , "Joel"      ,  "2 Yoel"     },
-      {  9 , "Amos"      ,  "3"          },
-      {  1 , "Obadiah"   ,  "4 Obadyahu" },
-      {  4 , "Jonah"     ,  "5"          },
-      {  7 , "Micah"     ,  "6 Mikayahu" },
-      {  3 , "Nahum"     ,  "7"          },
-      {  3 , "Habakkuk"  ,  "8"          },
-      {  3 , "Zephaniah" ,  "9 Səfanya"  },
-      {  2 , "Haggai"    , "10 Haggay"   },
-      { 14 , "Zechariah" , "11 Zəkarya"  },
-      {  4 , "Malachi"   , "12 Malaki"   },
+      { 14 , "[01] Hosea"     , NULL       },
+      {  3 , "[02] Joel"      , "Yoel"     },
+      {  9 , "[03] Amos"      , NULL       },
+      {  1 , "[04] Obadiah"   , "Obadyahu" },
+      {  4 , "[05] Jonah"     , NULL       },
+      {  7 , "[06] Micah"     , "Mikayahu" },
+      {  3 , "[07] Nahum"     , NULL       },
+      {  3 , "[08] Habakkuk"  , NULL       },
+      {  3 , "[09] Zephaniah" , "Səfanya"  },
+      {  2 , "[10] Haggai"    , "Haggay"   },
+      { 14 , "[11] Zechariah" , "Zəkarya"  },
+      {  4 , "[12] Malachi"   , "Malaki"   },
       { NULLBOOK }
     }
   },
