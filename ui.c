@@ -114,7 +114,7 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
   }
 }
 
-void ui_init_theme(){
+void ui_theme(){
   AdwStyleManager *const mgm=adw_style_manager_get_default();
   g_assert_true(adw_style_manager_get_system_supports_color_schemes(mgm));
   g_assert_true(ADW_COLOR_SCHEME_DEFAULT==adw_style_manager_get_color_scheme(mgm)); // g_print("%d\n", adw_style_manager_get_color_scheme(mgm));

@@ -21,20 +21,15 @@ int main(ARGPARA){
 
   // init
   adw_init();
-  ui_init_theme();
+  ui_theme();
   ui_init_lb();
   ui_register_gres();
   bc_init();
-
   bs_init();
   bs_tanakh=bs_new(tanakh.n_total_chapters+1);
-
-  // g_print("0x%016lX\n", *locate(bs_tanakh, 32));
-  // bs_toggle(bs_tanakh, 32, TRUE);
-  // g_print("0x%016lX\n", *locate(bs_tanakh, 32));
+  int e=0;
 
   // spawn
-  int e=0;
   e=g_application_run2(ARGPASS);
 
   // cleanup
