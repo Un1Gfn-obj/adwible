@@ -29,8 +29,13 @@ int main(ARGPARA){
   bs_init();
   bs_tanakh=bs_new(tanakh.n_total_chapters+1);
 
+  // g_print("0x%016lX\n", *locate(bs_tanakh, 32));
+  // bs_toggle(bs_tanakh, 32, TRUE);
+  // g_print("0x%016lX\n", *locate(bs_tanakh, 32));
+
   // spawn
-  const int e=g_application_run2(ARGPASS);
+  int e=0;
+  e=g_application_run2(ARGPASS);
 
   // cleanup
   ui_unregister_gres();

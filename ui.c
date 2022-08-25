@@ -52,6 +52,7 @@ static void toggle_cb(/*__attribute__((unused)) */GtkToggleButton* self, gpointe
 
   bs_toggle(bs_tanakh, n, gtk_toggle_button_get_active(self));
   g_message("GtkToggleButton::toggled [%ld] ?->%s", n, gtk_toggle_button_get_active(self)?"O":".");
+  bs_test(bs_tanakh, 64);
   
 }
 
