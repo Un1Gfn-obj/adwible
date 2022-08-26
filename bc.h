@@ -4,6 +4,9 @@
 
 #include "bs.h" // bitset
 
+#define BIN_TANAKH     "./tanakh.bin"
+#define BIN_EVANGELION "./evangelion.bin"
+
 // bible
 //   testament (old, new)
 //     group (Torah, Ketuvim, Gospel, ...)

@@ -1,5 +1,6 @@
 // #include <gtk/gtk.h>
 #include <adwaita.h> // AdwApplication
+#include <errno.h>
 #include <glib.h> // g_assert_true
 
 #include "ui.h"
@@ -19,17 +20,39 @@ int g_application_run2(ARGPARA){
 
 int main(ARGPARA){
 
-  // init
+  // backend
+  bc_init();
+  bs_init();
+
+  g_assert_true(0==chdir(g_get_user_config_dir()));
+  gchar *curd=g_get_current_dir(); // g_canonicalize_filename
+  g_assert_true(curd && 0==g_strcmp0("/home/darren/.config", curd));
+  g_free(curd); curd=NULL;
+
+  g_assert_true(0==g_mkdir_with_parents("./adwible", 0755));
+  g_assert_true(0==chdir("./adwible")); 
+
+  bs_tanakh=bs_new(tanakh.n_total_chapters+1);
+  bs_load(bs_tanakh, BIN_TANAKH);
+
+  // const int r_md=g_mkdir_with_parents("./adwible", 0755);
+  // g_assert_true(0==chdir("./adwible"));
+  // g_message("r_md=%d", r_md);
+  // if(-1==r_md){
+  //   g_assert_true(EEXIST==errno);
+  //   bs_load(bs_tanakh, BIN_TANAKH);
+  // }else{
+  //   g_assert_true(0==r_md);
+  // }
+
+  // gui
   adw_init();
   ui_theme();
   ui_init_lb();
   ui_register_gres();
-  bc_init();
-  bs_init();
-  bs_tanakh=bs_new(tanakh.n_total_chapters+1);
-  int e=0;
 
   // spawn
+  int e=0;
   e=g_application_run2(ARGPASS);
 
   // cleanup

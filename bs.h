@@ -9,3 +9,5 @@ bitset_t *bs_new(const int);
 void bs_toggle(bitset_t *const, const glong, const gboolean);
 void bs_free(bitset_t *const);
 void bs_test(bitset_t *const, const gint);
+void bs_save(const bitset_t *const, const gchar *const);
+void bs_load(bitset_t *const, const gchar *const);

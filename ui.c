@@ -45,6 +45,7 @@ static inline void click_keep_bg(GtkWidget *const widget){
 }
 
 static void toggle_cb(/*__attribute__((unused)) */GtkToggleButton* self, gpointer user_data){
+
   // g_assert_true(user_data);
   // const glong n=*((glong*)user_data); g_assert_true(1<=n);
   const glong n=(glong)user_data; g_assert_true(1<=n && n<=tanakh.n_total_chapters);
@@ -53,7 +54,7 @@ static void toggle_cb(/*__attribute__((unused)) */GtkToggleButton* self, gpointe
   bs_toggle(bs_tanakh, n, gtk_toggle_button_get_active(self));
   g_message("GtkToggleButton::toggled [%ld] ?->%s", n, gtk_toggle_button_get_active(self)?"O":".");
   bs_test(bs_tanakh, 64);
-  
+
 }
 
 static inline void add_testament(GtkBox *const box, const bc_testament_t *const testament){
@@ -114,18 +115,11 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
   }
 }
 
-void ui_theme(){
-  AdwStyleManager *const mgm=adw_style_manager_get_default();
-  g_assert_true(adw_style_manager_get_system_supports_color_schemes(mgm));
-  g_assert_true(ADW_COLOR_SCHEME_DEFAULT==adw_style_manager_get_color_scheme(mgm)); // g_print("%d\n", adw_style_manager_get_color_scheme(mgm));
-  dark=adw_style_manager_get_dark(mgm);
-  // adw_style_manager_set_color_scheme(mgm, ADW_COLOR_SCHEME_FORCE_DARK); g_assert_true(ADW_COLOR_SCHEME_FORCE_DARK==adw_style_manager_get_color_scheme(mgm));
-}
-
-void ui_init_lb(){
-  g_strlcpy(lb[0], "0", 2);
-  for(int i=1; i<=MAXCHAP; ++i)
-    snprintf(lb[i], 3+1, "%d", i);
+static gboolean close_request_cb(GtkWindow *const self, __attribute__((unused)) gpointer user_data){
+  g_message("closed");
+  gtk_window_destroy(self); // is it necessary?
+  bs_save(bs_tanakh, BIN_TANAKH);
+  return FALSE;
 }
 
 void ui_app_activate_cb(AdwApplication *app){
@@ -164,11 +158,14 @@ void ui_app_activate_cb(AdwApplication *app){
   add_testament(GTK_BOX(box_tanakh), &tanakh);
 
   GObject *const win=gtk_builder_get_object(builder, "tf2fhx"); g_assert_true(win);
+  g_signal_connect(win, "close-request", G_CALLBACK(close_request_cb), NULL);
+
   if(!isMobile()){
     g_message("not wt88047, resizing...");
     gtk_window_set_default_size(GTK_WINDOW(win), width, height);
   }
   gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(win));
+
   gtk_widget_show(GTK_WIDGET(win)); // gtk_window_present(GTK_WINDOW(win));
 
   // GtkFlowBox no animation
@@ -177,6 +174,20 @@ void ui_app_activate_cb(AdwApplication *app){
   // g_assert_true(1<signalID && signalID<(gulong)(-2));
   // g_assert_true(0==g_signal_handlers_disconnect_matched(fb, G_SIGNAL_MATCH_ID, signalID, 0, NULL, NULL, NULL));
 
+}
+
+void ui_theme(){
+  AdwStyleManager *const mgm=adw_style_manager_get_default();
+  g_assert_true(adw_style_manager_get_system_supports_color_schemes(mgm));
+  g_assert_true(ADW_COLOR_SCHEME_DEFAULT==adw_style_manager_get_color_scheme(mgm)); // g_print("%d\n", adw_style_manager_get_color_scheme(mgm));
+  dark=adw_style_manager_get_dark(mgm);
+  // adw_style_manager_set_color_scheme(mgm, ADW_COLOR_SCHEME_FORCE_DARK); g_assert_true(ADW_COLOR_SCHEME_FORCE_DARK==adw_style_manager_get_color_scheme(mgm));
+}
+
+void ui_init_lb(){
+  g_strlcpy(lb[0], "0", 2);
+  for(int i=1; i<=MAXCHAP; ++i)
+    snprintf(lb[i], 3+1, "%d", i);
 }
 
 void ui_register_gres(){

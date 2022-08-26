@@ -19,18 +19,21 @@ t: builddir.aarch64/adwible
 
 # postbuild.valgrind
 v: b
+# 	@rm -iv /tmp/adwible.bin || true
 	@echo ":; less -SRM +% -p 'HEAP SUMMARY' /tmp/valgrind.log"
 	@echo ":; tail -f -c +0 $(VL)"
 	$(E) $(NODOWNLOAD) $(V) --log-file=$(VL) $(O)/adwible
 
 # postbuild.gdb
 g: b
+# 	@rm -iv /tmp/adwible.bin || true
 	$(E) gdb $(O)/adwible
 
 # postbuild.run
 r: b
 # 	find $(O)/
 # 	https://unix.stackexchange.com/questions/438117
+# 	@rm -iv /tmp/adwible.bin || true
 	@rm -fv $(VL)
 	$(E) $(O)/adwible
 
