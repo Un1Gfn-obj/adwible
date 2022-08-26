@@ -23,7 +23,7 @@ static inline seg_t *locate(bitset_t *bs, const glong i){
   return &(bs->b[i/bitsin(seg_t)]);
 }
 
-static inline gboolean bs_get(bitset_t *const bs, const glong i){
+gboolean bs_get(bitset_t *const bs, const glong i){
   return (_Bool)((*(locate(bs, i))) & (((seg_t)1)<<(i%bitsin(seg_t))));
 }
 
@@ -79,7 +79,8 @@ void bs_free(bitset_t *const bs){
 }
 
 // display
-void bs_test(bitset_t *const bs, const gint width){
+void bs_test(bitset_t *const bs){
+  static const int width=64;
   g_assert_true(!( (bs->b[0]) & (((seg_t)1)<<0) ));
   for(gint i=1; i<bs->n_bits; ++i){
     g_print("%c", bs_get(bs, i)?'O':'.');
@@ -102,11 +103,10 @@ void bs_test(bitset_t *const bs, const gint width){
 
 void bs_save(const bitset_t *const bs, const gchar *const filename){
 
-  g_message("saving to '%s'", filename);
-
   // g_assert_true(g_file_set_contents(path, bs->b, bs->n_segs, NULL));
   // g_assert_true(0644==)
   g_assert_true(g_file_set_contents_full(filename, bs->b, bs->n_segs, G_FILE_SET_CONTENTS_CONSISTENT, 0644, NULL));
+  g_message("'%s' saved.", filename);
 
   // // back up old file (rename/copy?)
   // adwible."$(date +%s)".bak

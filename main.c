@@ -26,7 +26,8 @@ int main(ARGPARA){
 
   g_assert_true(0==chdir(g_get_user_config_dir()));
   gchar *curd=g_get_current_dir(); // g_canonicalize_filename
-  g_assert_true(curd && 0==g_strcmp0("/home/darren/.config", curd));
+  g_assert_true(curd);
+  g_assert_true(0==g_strcmp0("/home/user/.config", curd) || 0==g_strcmp0("/home/darren/.config", curd));
   g_free(curd); curd=NULL;
 
   g_assert_true(0==g_mkdir_with_parents("./adwible", 0755));
@@ -34,6 +35,7 @@ int main(ARGPARA){
 
   bs_tanakh=bs_new(tanakh.n_total_chapters+1);
   bs_load(bs_tanakh, BIN_TANAKH);
+  bs_test(bs_tanakh);
 
   // const int r_md=g_mkdir_with_parents("./adwible", 0755);
   // g_assert_true(0==chdir("./adwible"));

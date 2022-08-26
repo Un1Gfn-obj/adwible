@@ -53,7 +53,7 @@ static void toggle_cb(/*__attribute__((unused)) */GtkToggleButton* self, gpointe
 
   bs_toggle(bs_tanakh, n, gtk_toggle_button_get_active(self));
   g_message("GtkToggleButton::toggled [%ld] ?->%s", n, gtk_toggle_button_get_active(self)?"O":".");
-  bs_test(bs_tanakh, 64);
+  bs_test(bs_tanakh);
 
 }
 
@@ -96,11 +96,15 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
         GtkWidget *tb=gtk_toggle_button_new_with_label(lb[i]); // GtkToggleButton
         gtk_widget_set_halign(tb, GTK_ALIGN_FILL);
         gtk_widget_set_hexpand(tb, FALSE);
+
         ++cur_chapter;
-        // g_signal_connect(tb, "toggled", G_CALLBACK(toggle_cb),&(int){cur_chapter}); // error - invalid read
-        g_signal_connect(tb, "toggled", G_CALLBACK(toggle_cb),(gpointer)cur_chapter);
+        if(bs_get(bs_tanakh, cur_chapter))
+          gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(tb), TRUE); // don't call toggle_cb() yet!
+        g_signal_connect(tb, "toggled", G_CALLBACK(toggle_cb),(gpointer)cur_chapter); // g_signal_connect(tb, "toggled", G_CALLBACK(toggle_cb),&(int){cur_chapter}); // error - invalid read
+
         // add a chapter to a book
         gtk_flow_box_append(GTK_FLOW_BOX(fb), tb);
+
       }
       adw_expander_row_add_row(ADW_EXPANDER_ROW(er), fb);
       GtkWidget *const row=gtk_widget_get_parent(fb);
@@ -116,7 +120,7 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
 }
 
 static gboolean close_request_cb(GtkWindow *const self, __attribute__((unused)) gpointer user_data){
-  g_message("closed");
+  // g_message("closed");
   gtk_window_destroy(self); // is it necessary?
   bs_save(bs_tanakh, BIN_TANAKH);
   return FALSE;
