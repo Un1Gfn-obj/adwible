@@ -35,7 +35,7 @@ int main(ARGPARA){
 
   bs_tanakh=bs_new(tanakh.n_total_chapters+1);
   bs_load(bs_tanakh, BIN_TANAKH);
-  bs_test(bs_tanakh);
+  // bs_test(bs_tanakh);
 
   // const int r_md=g_mkdir_with_parents("./adwible", 0755);
   // g_assert_true(0==chdir("./adwible"));

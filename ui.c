@@ -52,9 +52,24 @@ static void toggle_cb(/*__attribute__((unused)) */GtkToggleButton* self, gpointe
   // g_message("GtkToggleButton::toggled [%ld]", n);
 
   bs_toggle(bs_tanakh, n, gtk_toggle_button_get_active(self));
-  g_message("GtkToggleButton::toggled [%ld] ?->%s", n, gtk_toggle_button_get_active(self)?"O":".");
-  bs_test(bs_tanakh);
+  // g_message("GtkToggleButton::toggled [%ld] ?->%s", n, gtk_toggle_button_get_active(self)?"O":".");
+  // bs_test(bs_tanakh);
 
+}
+
+static inline void add_book(GtkWidget *const flowbox, const bc_book_t *const book, glong *const chapter_counter){
+  g_assert_true(1<=book->n_chapters && book->n_chapters<=MAXCHAP);
+  for(int i=1; i<=book->n_chapters; ++i){
+    GtkWidget *tb=gtk_toggle_button_new_with_label(lb[i]); // GtkToggleButton
+    gtk_widget_set_halign(tb, GTK_ALIGN_FILL);
+    gtk_widget_set_hexpand(tb, FALSE);
+    ++(*chapter_counter);
+    // the following 3 lines must remain in order
+    if(bs_get(bs_tanakh, *chapter_counter)) // 1
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(tb), TRUE); // 2
+    g_signal_connect(tb, "toggled", G_CALLBACK(toggle_cb),(gpointer)(*chapter_counter)); // 3
+    gtk_flow_box_append(GTK_FLOW_BOX(flowbox), tb);
+  }
 }
 
 static inline void add_testament(GtkBox *const box, const bc_testament_t *const testament){
@@ -62,50 +77,28 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
   _Static_assert(sizeof(gpointer)==sizeof(glong));
   glong cur_chapter=0;
 
-  // add book groups to testament
   for(const bc_group_t *g=testament->groups; 0!=g->n_books; ++g){
 
-    GtkWidget *ag=adw_preferences_group_new(); // AdwPreferencesGroup
-    // GValue v=G_VALUE_INIT;
-    // GValue v={0}; g_assert_true(&v==g_value_init(&v, G_TYPE_STRING));
-    // g_value_set_static_string(&v, g->title); g_assert_true(G_VALUE_HOLDS_STRING(&v));
-    // g_object_set_property(G_OBJECT(ag), "title", &v);
-    adw_preferences_group_set_title(ADW_PREFERENCES_GROUP(ag), g->title);
-    adw_preferences_group_set_description(ADW_PREFERENCES_GROUP(ag), g->description);
+    // [AdwPreferencesGroup] AdwExpanderRow GtkListBoxRow GtkFlowBox
+    GtkWidget *apg=adw_preferences_group_new();
+    adw_preferences_group_set_title(ADW_PREFERENCES_GROUP(apg), g->title);
+    adw_preferences_group_set_description(ADW_PREFERENCES_GROUP(apg), g->description);
 
-    // add books to a book group
     for(const bc_book_t *b=g->books; 0!=b->n_chapters; ++b){
 
-      GtkWidget *er=adw_expander_row_new(); // AdwExpanderRow
+      // AdwPreferencesGroup [AdwExpanderRow] GtkListBoxRow GtkFlowBox
+      GtkWidget *er=adw_expander_row_new();
       adw_preferences_row_set_title(ADW_PREFERENCES_ROW(er), b->title);
       if(b->subtitle) adw_expander_row_set_subtitle(ADW_EXPANDER_ROW(er), b->subtitle);
+      adw_preferences_group_add(ADW_PREFERENCES_GROUP(apg), er);
       // if(expanded_before_last_exit)
       //   adw_expander_row_set_expanded(ADW_EXPANDER_ROW(er), TRUE);
 
-      // add a book to a book group
-      adw_preferences_group_add(ADW_PREFERENCES_GROUP(ag), er);
-
-      GtkWidget *fb=gtk_flow_box_new(); // GtkFlowBox
+      // AdwPreferencesGroup AdwExpanderRow [GtkListBoxRow GtkFlowBox]
+      GtkWidget *fb=gtk_flow_box_new();
       gtk_flow_box_set_max_children_per_line(GTK_FLOW_BOX(fb), 255);
       gtk_list_box_row_set_selectable(GTK_LIST_BOX_ROW(er), FALSE);
-      // gtk_list_box_row_set_activatable(GTK_LIST_BOX_ROW(er), FALSE);
-
-      // add chapters to a book
-      g_assert_true(1<=b->n_chapters && b->n_chapters<=MAXCHAP);
-      for(int i=1; i<=b->n_chapters; ++i){
-        GtkWidget *tb=gtk_toggle_button_new_with_label(lb[i]); // GtkToggleButton
-        gtk_widget_set_halign(tb, GTK_ALIGN_FILL);
-        gtk_widget_set_hexpand(tb, FALSE);
-
-        ++cur_chapter;
-        if(bs_get(bs_tanakh, cur_chapter))
-          gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(tb), TRUE); // don't call toggle_cb() yet!
-        g_signal_connect(tb, "toggled", G_CALLBACK(toggle_cb),(gpointer)cur_chapter); // g_signal_connect(tb, "toggled", G_CALLBACK(toggle_cb),&(int){cur_chapter}); // error - invalid read
-
-        // add a chapter to a book
-        gtk_flow_box_append(GTK_FLOW_BOX(fb), tb);
-
-      }
+      add_book(fb, b, &cur_chapter);
       adw_expander_row_add_row(ADW_EXPANDER_ROW(er), fb);
       GtkWidget *const row=gtk_widget_get_parent(fb);
       g_assert_true(g_type_check_instance_is_a((gpointer)row, gtk_list_box_row_get_type()));
@@ -114,7 +107,7 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
     }
 
     // add a testment to GtkBox in GtkScrolledWindow
-    gtk_box_append(box, ag);
+    gtk_box_append(box, apg);
 
   }
 }
@@ -231,3 +224,8 @@ void ui_unregister_gres(){
   g_resources_unregister(gres); gres=NULL;
   // g_resource_unref(gres); // double free // valgrind "Invalid read of size 4"
 }
+
+// GValue v=G_VALUE_INIT;
+// GValue v={0}; g_assert_true(&v==g_value_init(&v, G_TYPE_STRING));
+// g_value_set_static_string(&v, g->title); g_assert_true(G_VALUE_HOLDS_STRING(&v));
+// g_object_set_property(G_OBJECT(apg), "title", &v);
