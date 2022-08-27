@@ -13,11 +13,13 @@ bitset_t *bs_tanakh=NULL;
 
 // old testament
 const bc_testament_t tanakh={
+  .progress="./tanakh.bin",
+  .autoexpand="./tanakh.expand",
   // https://justwordministries.com/wp-content/uploads/2020/02/Bible-Books-Chapters-and-Verses-Chart.pdf
-  5,              // .n_total_groups
-  39,             // .n_total_books
-  929,            // .n_total_chapters
-  (bc_group_t[]){ // .groups
+  .n_total_groups=5,
+  .n_total_books=39,
+  .n_total_chapters=929,
+  .groups=(bc_group_t[]){
     {
       5,
       "Torah",

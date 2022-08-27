@@ -103,8 +103,8 @@ void bs_test(bitset_t *const bs){
 
 void bs_save(const bitset_t *const bs, const gchar *const filename){
 
-  // g_assert_true(g_file_set_contents(path, bs->b, bs->n_segs, NULL));
-  // g_assert_true(0644==)
+  // GLib.file_set_contents()
+  // GLib.file_set_contents_full()
   g_assert_true(g_file_set_contents_full(filename, bs->b, bs->n_segs, G_FILE_SET_CONTENTS_CONSISTENT, 0644, NULL));
   g_message("'%s' saved.", filename);
 
@@ -146,6 +146,7 @@ void bs_load(bitset_t *const bs, const gchar *const filename){
   gchar *contents=NULL;
   gsize length=0;
   GError *e=NULL;
+  // GLib.file_get_contents()
   if(g_file_get_contents(filename, &contents, &length, &e)){
     g_assert_true(contents);
     g_assert_true(!((contents[0]) & ((seg_t)1<<0)));

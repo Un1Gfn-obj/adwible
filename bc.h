@@ -4,9 +4,6 @@
 
 #include "bs.h" // bitset
 
-#define BIN_TANAKH     "./tanakh.bin"
-#define BIN_EVANGELION "./evangelion.bin"
-
 // bible
 //   testament (old, new)
 //     group (Torah, Ketuvim, Gospel, ...)
@@ -21,6 +18,8 @@ typedef struct bc_book_s      bc_book_t;
 // typedef const bc_group_t bc_testament_t[];
 
 struct bc_testament_s {
+  const char *const progress;
+  const char *const autoexpand;
   const int n_total_groups;
   const int n_total_books;
   const int n_total_chapters;

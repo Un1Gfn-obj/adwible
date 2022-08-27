@@ -91,8 +91,35 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
       adw_preferences_row_set_title(ADW_PREFERENCES_ROW(er), b->title);
       if(b->subtitle) adw_expander_row_set_subtitle(ADW_EXPANDER_ROW(er), b->subtitle);
       adw_preferences_group_add(ADW_PREFERENCES_GROUP(apg), er);
-      // if(expanded_before_last_exit)
-      //   adw_expander_row_set_expanded(ADW_EXPANDER_ROW(er), TRUE);
+
+      // autoexpand
+      {
+        // GLib.file_get_contents()
+        gchar *contents=NULL;
+        gsize length=0;
+        GError *e=NULL;
+        if(g_file_get_contents(testament->autoexpand, &contents, &length, &e)){
+          g_assert_true(contents);
+
+          // const gint64 ll=g_ascii_strtoll(contents, NULL, 10);
+          // g_assert_true(1<=ll && ll<=testament->n_total_groups);
+          // if(ll==g-testament->groups+1)
+          //   adw_expander_row_set_expanded(ADW_EXPANDER_ROW(er), TRUE);
+
+          // if('\n'==contents[length-1])
+          //   contents[length-1]='\0';
+          g_assert_true(contents==g_strchomp(contents));
+          if(0==g_strcmp0(b->title, contents))
+            adw_expander_row_set_expanded(ADW_EXPANDER_ROW(er), TRUE);
+
+          g_free(contents); contents=NULL; length=0;
+        }else{
+          g_assert_true(e);
+          g_assert_true(G_FILE_ERROR==e->domain);
+          g_assert_true(G_FILE_ERROR_NOENT==e->code);
+          g_error_free(e); e=NULL;
+        }
+      }
 
       // AdwPreferencesGroup AdwExpanderRow [GtkListBoxRow GtkFlowBox]
       GtkWidget *fb=gtk_flow_box_new();
@@ -115,7 +142,7 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
 static gboolean close_request_cb(GtkWindow *const self, __attribute__((unused)) gpointer user_data){
   // g_message("closed");
   gtk_window_destroy(self); // is it necessary?
-  bs_save(bs_tanakh, BIN_TANAKH);
+  bs_save(bs_tanakh, tanakh.progress);
   return FALSE;
 }
 
