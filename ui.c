@@ -16,6 +16,9 @@ static GtkCssProvider *css_row_dark=NULL;
 static GtkCssProvider *css_row_light=NULL;
 GtkBuilder *builder=NULL;
 
+static GtkWidget *focus=NULL;
+static GThread *th_focus=NULL;
+
 static inline gboolean isMobile(){
   struct utsname name={0};
   g_assert_true(0==uname(&name));
@@ -87,10 +90,10 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
     for(const bc_book_t *b=g->books; 0!=b->n_chapters; ++b){
 
       // AdwPreferencesGroup [AdwExpanderRow] GtkListBoxRow GtkFlowBox
-      GtkWidget *er=adw_expander_row_new();
-      adw_preferences_row_set_title(ADW_PREFERENCES_ROW(er), b->title);
-      if(b->subtitle) adw_expander_row_set_subtitle(ADW_EXPANDER_ROW(er), b->subtitle);
-      adw_preferences_group_add(ADW_PREFERENCES_GROUP(apg), er);
+      GtkWidget *aer=adw_expander_row_new();
+      adw_preferences_row_set_title(ADW_PREFERENCES_ROW(aer), b->title);
+      if(b->subtitle) adw_expander_row_set_subtitle(ADW_EXPANDER_ROW(aer), b->subtitle);
+      adw_preferences_group_add(ADW_PREFERENCES_GROUP(apg), aer);
 
       // autoexpand
       {
@@ -104,15 +107,19 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
           // const gint64 ll=g_ascii_strtoll(contents, NULL, 10);
           // g_assert_true(1<=ll && ll<=testament->n_total_groups);
           // if(ll==g-testament->groups+1)
-          //   adw_expander_row_set_expanded(ADW_EXPANDER_ROW(er), TRUE);
+          //   adw_expander_row_set_expanded(ADW_EXPANDER_ROW(aer), TRUE);
 
           // if('\n'==contents[length-1])
           //   contents[length-1]='\0';
-          g_assert_true(contents==g_strchomp(contents));
-          if(0==g_strcmp0(b->title, contents))
-            adw_expander_row_set_expanded(ADW_EXPANDER_ROW(er), TRUE);
+
+          g_assert_true(contents==g_strchomp(contents)); // chomp chug strip
+          if(0==g_strcmp0(b->title, contents)){
+            adw_expander_row_set_expanded(ADW_EXPANDER_ROW(aer), TRUE);
+            focus=aer;
+          }
 
           g_free(contents); contents=NULL; length=0;
+
         }else{
           g_assert_true(e);
           g_assert_true(G_FILE_ERROR==e->domain);
@@ -124,9 +131,9 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
       // AdwPreferencesGroup AdwExpanderRow [GtkListBoxRow GtkFlowBox]
       GtkWidget *fb=gtk_flow_box_new();
       gtk_flow_box_set_max_children_per_line(GTK_FLOW_BOX(fb), 255);
-      gtk_list_box_row_set_selectable(GTK_LIST_BOX_ROW(er), FALSE);
+      gtk_list_box_row_set_selectable(GTK_LIST_BOX_ROW(aer), FALSE);
       add_book(fb, b, &cur_chapter);
-      adw_expander_row_add_row(ADW_EXPANDER_ROW(er), fb);
+      adw_expander_row_add_row(ADW_EXPANDER_ROW(aer), fb);
       GtkWidget *const row=gtk_widget_get_parent(fb);
       g_assert_true(g_type_check_instance_is_a((gpointer)row, gtk_list_box_row_get_type()));
       click_keep_bg(row);
@@ -140,14 +147,34 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
 }
 
 static gboolean close_request_cb(GtkWindow *const self, __attribute__((unused)) gpointer user_data){
+
+  g_assert_true(focus);
+  g_assert_true(th_focus);
+  g_assert_true(!g_thread_join(th_focus));
+  th_focus=NULL;
+
   // g_message("closed");
   gtk_window_destroy(self); // is it necessary?
   bs_save(bs_tanakh, tanakh.progress);
   return FALSE;
+
+}
+
+static gpointer threadfunc(gpointer data){
+  g_assert_true(!data);
+  sleep(3);
+  g_print("awake\n");
+  g_assert_true(focus);
+  g_assert_true(gtk_widget_get_focusable(focus));
+  g_assert_true(gtk_widget_get_realized(focus));
+  g_assert_true(gtk_widget_grab_focus(focus));
+  // gtk_widget_grab_focus(focus);
+  // gtk_window_set_focus(GTK_WINDOW(win), focus);
+  // g_thread_exit
+  return NULL;
 }
 
 void ui_app_activate_cb(AdwApplication *app){
-
 
   //        +---------+
   //        |         |
@@ -191,6 +218,11 @@ void ui_app_activate_cb(AdwApplication *app){
   gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(win));
 
   gtk_widget_show(GTK_WIDGET(win)); // gtk_window_present(GTK_WINDOW(win));
+
+  g_assert_true(focus);
+  g_assert_true(!th_focus);
+  th_focus=g_thread_new("th_focus", threadfunc, NULL);
+  g_assert_true(th_focus);
 
   // GtkFlowBox no animation
   // GObject *const fb=gtk_builder_get_object(builder, "dx7fws"); g_assert_true(fb);

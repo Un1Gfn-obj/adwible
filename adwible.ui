@@ -19,6 +19,7 @@
               <property name="hexpand">TRUE</property>
               <property name="kinetic-scrolling">TRUE</property>
               <property name="vscrollbar-policy">GTK_POLICY_ALWAYS</property>
+              <property name="window-placement">GTK_CORNER_BOTTOM_RIGHT</property>
               <child>
                 <object class="GtkBox" id="qgnxl8">
                   <property name="orientation">vertical</property>

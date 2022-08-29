@@ -58,3 +58,8 @@ mrproper:
 	rm -rfv $(O)/
 distclean:
 	rm -rfv $(O)/
+
+# gtk4-docs
+d:
+	@echo http://gtk4.localdomain/index.html
+	@sudo busybox httpd -f -vv -p $(shell dig +short gtk4.localdomain) -h /usr/share/doc/gtk4 /usr/share/doc/gtk4
