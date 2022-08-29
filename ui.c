@@ -16,8 +16,7 @@ static GtkCssProvider *css_row_dark=NULL;
 static GtkCssProvider *css_row_light=NULL;
 GtkBuilder *builder=NULL;
 
-static GtkWidget *focus=NULL;
-static GThread *th_focus=NULL;
+static GThread *th_scroll=NULL;
 
 static inline gboolean isMobile(){
   struct utsname name={0};
@@ -115,7 +114,6 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
           g_assert_true(contents==g_strchomp(contents)); // chomp chug strip
           if(0==g_strcmp0(b->title, contents)){
             adw_expander_row_set_expanded(ADW_EXPANDER_ROW(aer), TRUE);
-            focus=aer;
           }
 
           g_free(contents); contents=NULL; length=0;
@@ -146,12 +144,11 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
   }
 }
 
-static gboolean close_request_cb(GtkWindow *const self, __attribute__((unused)) gpointer user_data){
+static gboolean cb_close(GtkWindow *const self, __attribute__((unused)) gpointer user_data){
 
-  g_assert_true(focus);
-  g_assert_true(th_focus);
-  g_assert_true(!g_thread_join(th_focus));
-  th_focus=NULL;
+  g_assert_true(th_scroll);
+  // g_assert_true(!g_thread_join(th_scroll));
+  // th_scroll=NULL;
 
   // g_message("closed");
   gtk_window_destroy(self); // is it necessary?
@@ -160,18 +157,30 @@ static gboolean close_request_cb(GtkWindow *const self, __attribute__((unused)) 
 
 }
 
-static gpointer threadfunc(gpointer data){
-  g_assert_true(!data);
-  sleep(3);
-  g_print("awake\n");
-  g_assert_true(focus);
-  g_assert_true(gtk_widget_get_focusable(focus));
-  g_assert_true(gtk_widget_get_realized(focus));
-  g_assert_true(gtk_widget_grab_focus(focus));
-  // gtk_widget_grab_focus(focus);
-  // gtk_window_set_focus(GTK_WINDOW(win), focus);
+static gpointer show_v_adj(const gpointer data){
+  g_assert_true(g_type_check_instance_is_a(data, GTK_TYPE_SCROLLED_WINDOW));
+
+  sleep(1);
+  GtkAdjustment *const gadj=gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(data));
+  gtk_adjustment_set_value(gadj, 1169.0f);
+  gtk_scrolled_window_set_vadjustment(GTK_SCROLLED_WINDOW(data), gadj);
+
+  // for(;;){
+  //   sleep(1);
+  //   GtkAdjustment *const gadj=gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(data));
+  //   g_print("%lf\n", gtk_adjustment_get_upper(gadj));
+  //   g_print("%lf\n", gtk_adjustment_get_value(gadj));
+  //   g_print("%lf\n", gtk_adjustment_get_lower(gadj));
+  //   g_print("\n");
+  // }
+
   // g_thread_exit
   return NULL;
+}
+
+static void cb_scroll(GtkWidget *const self, const gpointer user_data){
+  g_assert_true(!user_data);
+  th_scroll=g_thread_new("th_scroll", show_v_adj, self); g_assert_true(th_scroll);
 }
 
 void ui_app_activate_cb(AdwApplication *app){
@@ -208,8 +217,12 @@ void ui_app_activate_cb(AdwApplication *app){
   GObject *const box_tanakh=gtk_builder_get_object(builder, "qgnxl8"); g_assert_true(box_tanakh);
   add_testament(GTK_BOX(box_tanakh), &tanakh);
 
+  GObject *const scrolledwin_tanakh=gtk_builder_get_object(builder, "qbtw37"); g_assert_true(box_tanakh);
+  g_signal_connect(scrolledwin_tanakh, "realize", G_CALLBACK(cb_scroll), NULL);
+  // g_signal_connect(scrolledwin_tanakh, "map", G_CALLBACK(cb_scroll), NULL);
+
   GObject *const win=gtk_builder_get_object(builder, "tf2fhx"); g_assert_true(win);
-  g_signal_connect(win, "close-request", G_CALLBACK(close_request_cb), NULL);
+  g_signal_connect(win, "close-request", G_CALLBACK(cb_close), NULL);
 
   if(!isMobile()){
     g_message("not wt88047, resizing...");
@@ -218,11 +231,6 @@ void ui_app_activate_cb(AdwApplication *app){
   gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(win));
 
   gtk_widget_show(GTK_WIDGET(win)); // gtk_window_present(GTK_WINDOW(win));
-
-  g_assert_true(focus);
-  g_assert_true(!th_focus);
-  th_focus=g_thread_new("th_focus", threadfunc, NULL);
-  g_assert_true(th_focus);
 
   // GtkFlowBox no animation
   // GObject *const fb=gtk_builder_get_object(builder, "dx7fws"); g_assert_true(fb);

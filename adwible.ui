@@ -14,7 +14,7 @@
         <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
 
           <child>
-            <object class="GtkScrolledWindow">
+            <object class="GtkScrolledWindow" id="qbtw37">
               <property name="vexpand">TRUE</property>
               <property name="hexpand">TRUE</property>
               <property name="kinetic-scrolling">TRUE</property>
