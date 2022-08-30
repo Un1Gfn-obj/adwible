@@ -15,17 +15,43 @@ static gboolean dark=FALSE;
 static GResource *gres=NULL;
 static GtkCssProvider *css_row_dark=NULL;
 static GtkCssProvider *css_row_light=NULL;
-GtkBuilder *builder=NULL;
+static GtkBuilder *builder=NULL;
+static const char *autoexpand=NULL;
 
-static void cb_toggle(/*__attribute__((unused)) */GtkToggleButton* self, gpointer user_data){
-  const glong n=(glong)user_data; g_assert_true(1<=n && n<=tanakh.n_total_chapters);
-  bs_toggle(bs_tanakh, n, gtk_toggle_button_get_active(self));
+typedef struct {
+  glong n; // current chapter
+  const char *t; // current book group
+} cb_toggle_t;
+
+static void cb_togglebutton(GtkToggleButton* self, gpointer data){
+  cb_toggle_t *p=(cb_toggle_t*)data;
+  // g_print("%ld\n", p->n);
+  g_assert_true(1<=(p->n) && (p->n)<=tanakh.n_total_chapters);
+  bs_toggle(bs_tanakh, p->n, gtk_toggle_button_get_active(self));
+  // g_print("%s\n", p->t);
+  g_assert_true(p->t); autoexpand=p->t;
   // bs_test(bs_tanakh);
 }
 
-static gboolean cb_close(GtkWindow *const self, __attribute__((unused)) gpointer user_data){
-  gtk_window_destroy(self); // is it necessary?
+// try g_signal_connect_closure?
+static void cb_togglebutton_destroy(__attribute__((unused)) GtkToggleButton* self, gpointer data){
+  g_free(data); data=NULL;
+}
+
+// bind to a floating button in GtkOverlay
+// show an AdwToast on success
+static void sync_progress_and_autoexpand(){
   bs_save(bs_tanakh, tanakh.progress);
+  if(autoexpand){
+    g_message("'%s' saved", tanakh.autoexpand);
+    g_assert_true(g_file_set_contents_full(tanakh.autoexpand, autoexpand, -1, G_FILE_SET_CONTENTS_CONSISTENT, 0644, NULL));
+  }
+}
+
+static gboolean cb_close(GtkWindow *const self, gpointer _){
+  g_assert_true(!_);
+  gtk_window_destroy(self); // is it necessary?
+  sync_progress_and_autoexpand();
   return FALSE;
 }
 
@@ -57,71 +83,53 @@ static inline void click_keep_bg(GtkWidget *const widget){
     gtk_style_context_add_provider(styct, GTK_STYLE_PROVIDER(css_row_light), GTK_STYLE_PROVIDER_PRIORITY_USER); // apply css
 }
 
-static inline void add_book(GtkWidget *const flowbox, const bc_book_t *const book, glong *const chapter_counter){
-  g_assert_true(1<=book->n_chapters && book->n_chapters<=MAXCHAP);
-  for(int i=1; i<=book->n_chapters; ++i){
-    GtkWidget *tb=gtk_toggle_button_new_with_label(lb[i]); // GtkToggleButton
-    gtk_widget_set_halign(tb, GTK_ALIGN_FILL);
-    gtk_widget_set_hexpand(tb, FALSE);
-    ++(*chapter_counter);
-    if(bs_get(bs_tanakh, *chapter_counter)) // 1/3
-      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(tb), TRUE); // 2/3
-    g_signal_connect(tb, "toggled", G_CALLBACK(cb_toggle),(gpointer)(*chapter_counter)); // 3/3
-    gtk_flow_box_append(GTK_FLOW_BOX(flowbox), tb);
-  }
-}
-
 static inline void add_testament(GtkBox *const box, const bc_testament_t *const testament){
 
-  _Static_assert(sizeof(gpointer)==sizeof(glong));
-  glong cur_chapter=0;
+  glong cur_chapter=0; _Static_assert(sizeof(gpointer)==sizeof(glong), "");
 
-  for(const bc_group_t *g=testament->groups; 0!=g->n_books; ++g){
+  GtkWidget *apg=NULL;
+  GtkWidget *aer=NULL;
+
+  gchar *contents=NULL;
+  gsize length=0;
+  GError *e=NULL;
+
+  // GLib.file_get_contents()
+  if(g_file_get_contents(testament->autoexpand, &contents, &length, &e)){
+    g_assert_true(contents);
+    g_assert_true(contents==g_strchomp(contents)); // chomp chug strip
+    g_message("'%s' loaded", testament->autoexpand);
+  }else{
+    g_assert_true(e);
+    g_assert_true(G_FILE_ERROR==e->domain);
+    g_assert_true(G_FILE_ERROR_NOENT==e->code);
+    g_error_free(e); e=NULL;
+  }
+
+  for(const bc_group_t *g=testament->groups; 0!=g->n_books; ++g){ // BEGIN LOOP groups in a testament
 
     // [AdwPreferencesGroup] AdwExpanderRow GtkListBoxRow GtkFlowBox
-    GtkWidget *apg=adw_preferences_group_new();
+    apg=adw_preferences_group_new();
     adw_preferences_group_set_title(ADW_PREFERENCES_GROUP(apg), g->title);
     adw_preferences_group_set_description(ADW_PREFERENCES_GROUP(apg), g->description);
 
-    for(const bc_book_t *b=g->books; 0!=b->n_chapters; ++b){
+    for(const bc_book_t *b=g->books; 0!=b->n_chapters; ++b){ // BEGIN LOOP books in a group
 
       // AdwPreferencesGroup [AdwExpanderRow] GtkListBoxRow GtkFlowBox
-      GtkWidget *aer=adw_expander_row_new();
+      aer=adw_expander_row_new();
       adw_preferences_row_set_title(ADW_PREFERENCES_ROW(aer), b->title);
-      if(b->subtitle) adw_expander_row_set_subtitle(ADW_EXPANDER_ROW(aer), b->subtitle);
+      if(b->subtitle)
+        adw_expander_row_set_subtitle(ADW_EXPANDER_ROW(aer), b->subtitle);
       adw_preferences_group_add(ADW_PREFERENCES_GROUP(apg), aer);
 
       // autoexpand
-      {
-        // GLib.file_get_contents()
-        gchar *contents=NULL;
-        gsize length=0;
-        GError *e=NULL;
-        if(g_file_get_contents(testament->autoexpand, &contents, &length, &e)){
-          g_assert_true(contents);
-
-          // const gint64 ll=g_ascii_strtoll(contents, NULL, 10);
-          // g_assert_true(1<=ll && ll<=testament->n_total_groups);
-          // if(ll==g-testament->groups+1)
-          //   adw_expander_row_set_expanded(ADW_EXPANDER_ROW(aer), TRUE);
-
-          // if('\n'==contents[length-1])
-          //   contents[length-1]='\0';
-
-          g_assert_true(contents==g_strchomp(contents)); // chomp chug strip
-          if(0==g_strcmp0(b->title, contents)){
-            adw_expander_row_set_expanded(ADW_EXPANDER_ROW(aer), TRUE);
-            scroll_aer=aer;
-            scroll_apg=apg;
-          }
-
-          g_free(contents); contents=NULL; length=0;
-
-        }else{
-          g_assert_true(e);
-          g_assert_true(G_FILE_ERROR==e->domain);
-          g_assert_true(G_FILE_ERROR_NOENT==e->code);
-          g_error_free(e); e=NULL;
+      if(contents){
+        // g_message("A.%s.%s.B", contents, b->title);
+        if(0==g_strcmp0(b->title, contents)){
+          g_message("'%s' expanded", contents);
+          adw_expander_row_set_expanded(ADW_EXPANDER_ROW(aer), TRUE);
+          scroll_aer=aer;
+          scroll_apg=apg;
         }
       }
 
@@ -129,18 +137,37 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
       GtkWidget *fb=gtk_flow_box_new();
       gtk_flow_box_set_max_children_per_line(GTK_FLOW_BOX(fb), 255);
       gtk_list_box_row_set_selectable(GTK_LIST_BOX_ROW(aer), FALSE);
-      add_book(fb, b, &cur_chapter);
+      { // add_book()
+        g_assert_true(1<=b->n_chapters && b->n_chapters<=MAXCHAP);
+        for(int i=1; i<=b->n_chapters; ++i){
+          GtkWidget *tb=gtk_toggle_button_new_with_label(lb[i]); // GtkToggleButton
+          gtk_widget_set_halign(tb, GTK_ALIGN_FILL);
+          gtk_widget_set_hexpand(tb, FALSE);
+          ++cur_chapter;
+          if(bs_get(bs_tanakh, cur_chapter)) // 1/3
+            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(tb), TRUE); // 2/3
+          cb_toggle_t *const cb_data=g_new0(cb_toggle_t, 1);
+          *cb_data=(cb_toggle_t){.n=cur_chapter, .t=b->title};
+          g_signal_connect(tb, "toggled", G_CALLBACK(cb_togglebutton), cb_data); // 3/3
+          g_signal_connect(tb, "destroy", G_CALLBACK(cb_togglebutton_destroy), cb_data); // 3/3
+          gtk_flow_box_append(GTK_FLOW_BOX(fb), tb);
+        }
+      }
       adw_expander_row_add_row(ADW_EXPANDER_ROW(aer), fb);
       GtkWidget *const row=gtk_widget_get_parent(fb);
       g_assert_true(g_type_check_instance_is_a((gpointer)row, gtk_list_box_row_get_type()));
       click_keep_bg(row);
 
-    }
+    } // END LOOP books in a group
+
 
     // add a testment to GtkBox in GtkScrolledWindow
     gtk_box_append(box, apg);
 
-  }
+  } // END LOOP groups in a testament
+
+  g_free(contents); contents=NULL; length=0;
+
 }
 
 void ui_app_activate_cb(AdwApplication *app){
@@ -262,3 +289,11 @@ void ui_unregister_gres(){
 //   // g_thread_exit
 //   return NULL;
 // }
+
+// const gint64 ll=g_ascii_strtoll(contents, NULL, 10);
+// g_assert_true(1<=ll && ll<=testament->n_total_groups);
+// if(ll==g-testament->groups+1)
+//   adw_expander_row_set_expanded(ADW_EXPANDER_ROW(aer), TRUE);
+
+// if('\n'==contents[length-1])
+//   contents[length-1]='\0';
