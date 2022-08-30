@@ -61,13 +61,4 @@ distclean:
 
 # gtk4-docs
 d:
-	@echo
-	@echo http://share.localdomain/gtk-doc/html/glib/index.html
-	@echo http://share.localdomain/gtk-doc/html/gobject/index.html
-	@echo http://share.localdomain/gtk-doc/html/gio/index.html
-	@echo
-	@echo http://share.localdomain/doc/gdk4/index.html
-	@echo http://share.localdomain/doc/gtk4/index.html
-	@echo http://share.localdomain/doc/libadwaita-1/index.html
-	@echo
-	@sudo busybox httpd -f -p $(shell dig +short share.localdomain) -h /usr/share/ /usr/share/
+	/usr/local/bin/doc.sh

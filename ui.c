@@ -42,7 +42,8 @@ static void cb_togglebutton_destroy(__attribute__((unused)) GtkToggleButton* sel
 
 // bind to a floating button in GtkOverlay
 // show an AdwToast on success
-static void sync_progress_and_autoexpand(){
+void cb_sync(__attribute__((unused)) GtkButton *self, gpointer _){
+  g_assert_true(!_);
   bs_save(bs_tanakh, tanakh.progress);
   if(autoexpand){
     g_message("'%s' saved", tanakh.autoexpand);
@@ -53,7 +54,7 @@ static void sync_progress_and_autoexpand(){
 static gboolean cb_close(GtkWindow *const self, gpointer _){
   g_assert_true(!_);
   gtk_window_destroy(self); // is it necessary?
-  sync_progress_and_autoexpand();
+  cb_sync(NULL, NULL);
   return FALSE;
 }
 
