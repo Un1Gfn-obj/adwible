@@ -38,6 +38,14 @@ ck3fm7_res = gnome.compile_resources('ck3fm7',
   gresource_bundle: false,
 )
 
+executable('demo',
+  'demo.c',
+  dependencies: [
+    dependency('gtk4'),
+    dependency('libadwaita-1'),
+  ]
+)
+
 executable(meson.project_name(),
   'main.c',
   'ui.c',

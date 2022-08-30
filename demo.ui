@@ -1,117 +1,377 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
   <requires lib="libadwaita" version="1.0"/>
-  <object class="AdwApplicationWindow" id="tf2fhx">
-    <property name="content">
-      <object class="GtkBox" id="box">
-        <property name="orientation">vertical</property>
+  <object class="GtkWindow" id="z9vmdc">
+    <property name="title">floating</property>
+    <property name="startup-id">floating</property>
+    <child>
+      <object class="GtkScrolledWindow" id="c32p5s">
         <child>
-          <object class="GtkBox" id="empty_box"/>
-        </child>
-        <child>
-          <object class="AdwCarousel" id="carousel">
-            <property name="vexpand">True</property>
-            <property name="hexpand">True</property>
-            <property name="allow-scroll-wheel" bind-source="scroll_wheel" bind-property="active" bind-flags="sync-create|bidirectional"/>
-            <property name="allow-long-swipes" bind-source="long_swipes" bind-property="active" bind-flags="sync-create|bidirectional"/>
-            <child>
-              <object class="AdwStatusPage">
-                <property name="icon-name">widget-carousel-symbolic</property>
-                <property name="title" translatable="yes">Carousel</property>
-                <property name="description" translatable="yes">A widget for paginated scrolling.</property>
-                <property name="vexpand">True</property>
-              </object>
-            </child>
-            <child>
-              <object class="AdwClamp">
-                <property name="margin-bottom">32</property>
-                <property name="margin-start">12</property>
-                <property name="margin-end">12</property>
-                <property name="maximum-size">400</property>
-                <property name="tightening-threshold">300</property>
-                <property name="valign">center</property>
-                <child>
-                  <object class="AdwPreferencesGroup">
-                    <child>
-                      <object class="AdwActionRow">
-                        <property name="title" translatable="yes">Scroll Wheel</property>
-                        <property name="activatable_widget">scroll_wheel</property>
-                        <child>
-                          <object class="GtkSwitch" id="scroll_wheel">
-                            <property name="valign">center</property>
-                            <property name="active">True</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="AdwActionRow">
-                        <property name="title" translatable="yes">Long Swipes</property>
-                        <property name="activatable_widget">long_swipes</property>
-                        <child>
-                          <object class="GtkSwitch" id="long_swipes">
-                            <property name="valign">center</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="AdwStatusPage">
-                <property name="title" translatable="yes">Another Page</property>
-                <property name="hexpand">True</property>
-                <property name="child">
-                  <object class="GtkButton">
-                    <property name="label" translatable="yes">_Return to the First Page</property>
-                    <property name="use-underline">True</property>
-                    <property name="halign">center</property>
-                    <property name="action-name">carousel.return</property>
-                    <style>
-                      <class name="suggested-action"/>
-                      <class name="pill"/>
-                    </style>
-                  </object>
-                </property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkStack" id="indicators_stack">
-            <property name="vhomogeneous">False</property>
-            <property name="margin-top">6</property>
-            <property name="margin-bottom">6</property>
-            <property name="margin-start">6</property>
-            <property name="margin-end">6</property>
-            <child>
-              <object class="GtkStackPage">
-                <property name="name">dots</property>
-                <property name="child">
-                  <object class="AdwCarouselIndicatorDots">
-                    <property name="carousel">carousel</property>
-                    <property name="orientation" bind-source="carousel" bind-property="orientation" bind-flags="sync-create"/>
-                  </object>
-                </property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkStackPage">
-                <property name="name">lines</property>
-                <property name="child">
-                  <object class="AdwCarouselIndicatorLines">
-                    <property name="carousel">carousel</property>
-                    <property name="orientation" bind-source="carousel" bind-property="orientation" bind-flags="sync-create"/>
-                  </object>
-                </property>
-              </object>
-            </child>
+          <object class="GtkBox" id="qgnxl8">
+            <property name="orientation">vertical</property>
+            <child><object class="GtkLabel"><property name="label">1</property></object></child>
+            <child><object class="GtkLabel"><property name="label">2</property></object></child>
+            <child><object class="GtkLabel"><property name="label">3</property></object></child>
+            <child><object class="GtkLabel"><property name="label">4</property></object></child>
+            <child><object class="GtkLabel"><property name="label">5</property></object></child>
+            <child><object class="GtkLabel"><property name="label">6</property></object></child>
+            <child><object class="GtkLabel"><property name="label">7</property></object></child>
+            <child><object class="GtkLabel"><property name="label">8</property></object></child>
+            <child><object class="GtkLabel"><property name="label">9</property></object></child>
+            <child><object class="GtkLabel"><property name="label">10</property></object></child>
+            <child><object class="GtkLabel"><property name="label">11</property></object></child>
+            <child><object class="GtkLabel"><property name="label">12</property></object></child>
+            <child><object class="GtkLabel"><property name="label">13</property></object></child>
+            <child><object class="GtkLabel"><property name="label">14</property></object></child>
+            <child><object class="GtkLabel"><property name="label">15</property></object></child>
+            <child><object class="GtkLabel"><property name="label">16</property></object></child>
+            <child><object class="GtkLabel"><property name="label">17</property></object></child>
+            <child><object class="GtkLabel"><property name="label">18</property></object></child>
+            <child><object class="GtkLabel"><property name="label">19</property></object></child>
+            <child><object class="GtkLabel"><property name="label">20</property></object></child>
+            <child><object class="GtkLabel"><property name="label">21</property></object></child>
+            <child><object class="GtkLabel"><property name="label">22</property></object></child>
+            <child><object class="GtkLabel"><property name="label">23</property></object></child>
+            <child><object class="GtkLabel"><property name="label">24</property></object></child>
+            <child><object class="GtkLabel"><property name="label">25</property></object></child>
+            <child><object class="GtkLabel"><property name="label">26</property></object></child>
+            <child><object class="GtkLabel"><property name="label">27</property></object></child>
+            <child><object class="GtkLabel"><property name="label">28</property></object></child>
+            <child><object class="GtkLabel"><property name="label">29</property></object></child>
+            <child><object class="GtkLabel"><property name="label">30</property></object></child>
+            <child><object class="GtkLabel"><property name="label">31</property></object></child>
+            <child><object class="GtkLabel"><property name="label">32</property></object></child>
+            <child><object class="GtkLabel"><property name="label">33</property></object></child>
+            <child><object class="GtkLabel"><property name="label">34</property></object></child>
+            <child><object class="GtkLabel"><property name="label">35</property></object></child>
+            <child><object class="GtkLabel"><property name="label">36</property></object></child>
+            <child><object class="GtkLabel"><property name="label">37</property></object></child>
+            <child><object class="GtkLabel"><property name="label">38</property></object></child>
+            <child><object class="GtkLabel"><property name="label">39</property></object></child>
+            <child><object class="GtkLabel"><property name="label">40</property></object></child>
+            <child><object class="GtkLabel"><property name="label">41</property></object></child>
+            <child><object class="GtkLabel"><property name="label">42</property></object></child>
+            <child><object class="GtkLabel"><property name="label">43</property></object></child>
+            <child><object class="GtkLabel"><property name="label">44</property></object></child>
+            <child><object class="GtkLabel"><property name="label">45</property></object></child>
+            <child><object class="GtkLabel"><property name="label">46</property></object></child>
+            <child><object class="GtkLabel"><property name="label">47</property></object></child>
+            <child><object class="GtkLabel"><property name="label">48</property></object></child>
+            <child><object class="GtkLabel"><property name="label">49</property></object></child>
+            <child><object class="GtkLabel"><property name="label">50</property></object></child>
+            <child><object class="GtkLabel"><property name="label">51</property></object></child>
+            <child><object class="GtkLabel"><property name="label">52</property></object></child>
+            <child><object class="GtkLabel"><property name="label">53</property></object></child>
+            <child><object class="GtkLabel"><property name="label">54</property></object></child>
+            <child><object class="GtkLabel"><property name="label">55</property></object></child>
+            <child><object class="GtkLabel"><property name="label">56</property></object></child>
+            <child><object class="GtkLabel"><property name="label">57</property></object></child>
+            <child><object class="GtkLabel"><property name="label">58</property></object></child>
+            <child><object class="GtkLabel"><property name="label">59</property></object></child>
+            <child><object class="GtkLabel"><property name="label">60</property></object></child>
+            <child><object class="GtkLabel"><property name="label">61</property></object></child>
+            <child><object class="GtkLabel"><property name="label">62</property></object></child>
+            <child><object class="GtkLabel"><property name="label">63</property></object></child>
+            <child><object class="GtkLabel"><property name="label">64</property></object></child>
+            <child><object class="GtkLabel"><property name="label">65</property></object></child>
+            <child><object class="GtkLabel"><property name="label">66</property></object></child>
+            <child><object class="GtkLabel"><property name="label">67</property></object></child>
+            <child><object class="GtkLabel"><property name="label">68</property></object></child>
+            <child><object class="GtkLabel"><property name="label">69</property></object></child>
+            <child><object class="GtkLabel"><property name="label">70</property></object></child>
+            <child><object class="GtkLabel"><property name="label">71</property></object></child>
+            <child><object class="GtkLabel"><property name="label">72</property></object></child>
+            <child><object class="GtkLabel"><property name="label">73</property></object></child>
+            <child><object class="GtkLabel"><property name="label">74</property></object></child>
+            <child><object class="GtkLabel"><property name="label">75</property></object></child>
+            <child><object class="GtkLabel"><property name="label">76</property></object></child>
+            <child><object class="GtkLabel"><property name="label">77</property></object></child>
+            <child><object class="GtkLabel"><property name="label">78</property></object></child>
+            <child><object class="GtkLabel"><property name="label">79</property></object></child>
+            <child><object class="GtkLabel"><property name="label">80</property></object></child>
+            <child><object class="GtkLabel"><property name="label">81</property></object></child>
+            <child><object class="GtkLabel"><property name="label">82</property></object></child>
+            <child><object class="GtkLabel"><property name="label">83</property></object></child>
+            <child><object class="GtkLabel"><property name="label">84</property></object></child>
+            <child><object class="GtkLabel"><property name="label">85</property></object></child>
+            <child><object class="GtkLabel"><property name="label">86</property></object></child>
+            <child><object class="GtkLabel"><property name="label">87</property></object></child>
+            <child><object class="GtkLabel"><property name="label">88</property></object></child>
+            <child><object class="GtkLabel"><property name="label">89</property></object></child>
+            <child><object class="GtkLabel"><property name="label">90</property></object></child>
+            <child><object class="GtkLabel"><property name="label">91</property></object></child>
+            <child><object class="GtkLabel"><property name="label">92</property></object></child>
+            <child><object class="GtkLabel"><property name="label">93</property></object></child>
+            <child><object class="GtkLabel"><property name="label">94</property></object></child>
+            <child><object class="GtkLabel"><property name="label">95</property></object></child>
+            <child><object class="GtkLabel"><property name="label">96</property></object></child>
+            <child><object class="GtkLabel"><property name="label">97</property></object></child>
+            <child><object class="GtkLabel"><property name="label">98</property></object></child>
+            <child><object class="GtkLabel"><property name="label">99</property></object></child>
+            <child><object class="GtkLabel"><property name="label">100</property></object></child>
+            <child><object class="GtkLabel"><property name="label">101</property></object></child>
+            <child><object class="GtkLabel"><property name="label">102</property></object></child>
+            <child><object class="GtkLabel"><property name="label">103</property></object></child>
+            <child><object class="GtkLabel"><property name="label">104</property></object></child>
+            <child><object class="GtkLabel"><property name="label">105</property></object></child>
+            <child><object class="GtkLabel"><property name="label">106</property></object></child>
+            <child><object class="GtkLabel"><property name="label">107</property></object></child>
+            <child><object class="GtkLabel"><property name="label">108</property></object></child>
+            <child><object class="GtkLabel"><property name="label">109</property></object></child>
+            <child><object class="GtkLabel"><property name="label">110</property></object></child>
+            <child><object class="GtkLabel"><property name="label">111</property></object></child>
+            <child><object class="GtkLabel"><property name="label">112</property></object></child>
+            <child><object class="GtkLabel"><property name="label">113</property></object></child>
+            <child><object class="GtkLabel"><property name="label">114</property></object></child>
+            <child><object class="GtkLabel"><property name="label">115</property></object></child>
+            <child><object class="GtkLabel"><property name="label">116</property></object></child>
+            <child><object class="GtkLabel"><property name="label">117</property></object></child>
+            <child><object class="GtkLabel"><property name="label">118</property></object></child>
+            <child><object class="GtkLabel"><property name="label">119</property></object></child>
+            <child><object class="GtkLabel"><property name="label">120</property></object></child>
+            <child><object class="GtkLabel"><property name="label">121</property></object></child>
+            <child><object class="GtkLabel"><property name="label">122</property></object></child>
+            <child><object class="GtkLabel"><property name="label">123</property></object></child>
+            <child><object class="GtkLabel"><property name="label">124</property></object></child>
+            <child><object class="GtkLabel"><property name="label">125</property></object></child>
+            <child><object class="GtkLabel"><property name="label">126</property></object></child>
+            <child><object class="GtkLabel"><property name="label">127</property></object></child>
+            <child><object class="GtkLabel"><property name="label">128</property></object></child>
+            <child><object class="GtkLabel"><property name="label">129</property></object></child>
+            <child><object class="GtkLabel"><property name="label">130</property></object></child>
+            <child><object class="GtkLabel"><property name="label">131</property></object></child>
+            <child><object class="GtkLabel"><property name="label">132</property></object></child>
+            <child><object class="GtkLabel"><property name="label">133</property></object></child>
+            <child><object class="GtkLabel"><property name="label">134</property></object></child>
+            <child><object class="GtkLabel"><property name="label">135</property></object></child>
+            <child><object class="GtkLabel"><property name="label">136</property></object></child>
+            <child><object class="GtkLabel"><property name="label">137</property></object></child>
+            <child><object class="GtkLabel"><property name="label">138</property></object></child>
+            <child><object class="GtkLabel"><property name="label">139</property></object></child>
+            <child><object class="GtkLabel"><property name="label">140</property></object></child>
+            <child><object class="GtkLabel"><property name="label">141</property></object></child>
+            <child><object class="GtkLabel"><property name="label">142</property></object></child>
+            <child><object class="GtkLabel"><property name="label">143</property></object></child>
+            <child><object class="GtkLabel"><property name="label">144</property></object></child>
+            <child><object class="GtkLabel"><property name="label">145</property></object></child>
+            <child><object class="GtkLabel"><property name="label">146</property></object></child>
+            <child><object class="GtkLabel"><property name="label">147</property></object></child>
+            <child><object class="GtkLabel"><property name="label">148</property></object></child>
+            <child><object class="GtkLabel"><property name="label">149</property></object></child>
+            <child><object class="GtkLabel"><property name="label">150</property></object></child>
+            <child><object class="GtkLabel"><property name="label">151</property></object></child>
+            <child><object class="GtkLabel"><property name="label">152</property></object></child>
+            <child><object class="GtkLabel"><property name="label">153</property></object></child>
+            <child><object class="GtkLabel"><property name="label">154</property></object></child>
+            <child><object class="GtkLabel"><property name="label">155</property></object></child>
+            <child><object class="GtkLabel"><property name="label">156</property></object></child>
+            <child><object class="GtkLabel"><property name="label">157</property></object></child>
+            <child><object class="GtkLabel"><property name="label">158</property></object></child>
+            <child><object class="GtkLabel"><property name="label">159</property></object></child>
+            <child><object class="GtkLabel"><property name="label">160</property></object></child>
+            <child><object class="GtkLabel"><property name="label">161</property></object></child>
+            <child><object class="GtkLabel"><property name="label">162</property></object></child>
+            <child><object class="GtkLabel"><property name="label">163</property></object></child>
+            <child><object class="GtkLabel"><property name="label">164</property></object></child>
+            <child><object class="GtkLabel"><property name="label">165</property></object></child>
+            <child><object class="GtkLabel"><property name="label">166</property></object></child>
+            <child><object class="GtkLabel"><property name="label">167</property></object></child>
+            <child><object class="GtkLabel"><property name="label">168</property></object></child>
+            <child><object class="GtkLabel"><property name="label">169</property></object></child>
+            <child><object class="GtkLabel"><property name="label">170</property></object></child>
+            <child><object class="GtkLabel"><property name="label">171</property></object></child>
+            <child><object class="GtkLabel"><property name="label">172</property></object></child>
+            <child><object class="GtkLabel"><property name="label">173</property></object></child>
+            <child><object class="GtkLabel"><property name="label">174</property></object></child>
+            <child><object class="GtkLabel"><property name="label">175</property></object></child>
+            <child><object class="GtkLabel"><property name="label">176</property></object></child>
+            <child><object class="GtkLabel"><property name="label">177</property></object></child>
+            <child><object class="GtkLabel"><property name="label">178</property></object></child>
+            <child><object class="GtkLabel"><property name="label">179</property></object></child>
+            <child><object class="GtkLabel"><property name="label">180</property></object></child>
+            <child><object class="GtkLabel"><property name="label">181</property></object></child>
+            <child><object class="GtkLabel"><property name="label">182</property></object></child>
+            <child><object class="GtkLabel"><property name="label">183</property></object></child>
+            <child><object class="GtkLabel"><property name="label">184</property></object></child>
+            <child><object class="GtkLabel"><property name="label">185</property></object></child>
+            <child><object class="GtkLabel"><property name="label">186</property></object></child>
+            <child><object class="GtkLabel"><property name="label">187</property></object></child>
+            <child><object class="GtkLabel"><property name="label">188</property></object></child>
+            <child><object class="GtkLabel"><property name="label">189</property></object></child>
+            <child><object class="GtkLabel"><property name="label">190</property></object></child>
+            <child><object class="GtkLabel"><property name="label">191</property></object></child>
+            <child><object class="GtkLabel"><property name="label">192</property></object></child>
+            <child><object class="GtkLabel"><property name="label">193</property></object></child>
+            <child><object class="GtkLabel"><property name="label">194</property></object></child>
+            <child><object class="GtkLabel"><property name="label">195</property></object></child>
+            <child><object class="GtkLabel"><property name="label">196</property></object></child>
+            <child><object class="GtkLabel"><property name="label">197</property></object></child>
+            <child><object class="GtkLabel"><property name="label">198</property></object></child>
+            <child><object class="GtkLabel"><property name="label">199</property></object></child>
+            <child><object class="GtkLabel"><property name="label">200</property></object></child>
+            <child><object class="GtkLabel"><property name="label">201</property></object></child>
+            <child><object class="GtkLabel"><property name="label">202</property></object></child>
+            <child><object class="GtkLabel"><property name="label">203</property></object></child>
+            <child><object class="GtkLabel"><property name="label">204</property></object></child>
+            <child><object class="GtkLabel"><property name="label">205</property></object></child>
+            <child><object class="GtkLabel"><property name="label">206</property></object></child>
+            <child><object class="GtkLabel"><property name="label">207</property></object></child>
+            <child><object class="GtkLabel"><property name="label">208</property></object></child>
+            <child><object class="GtkLabel"><property name="label">209</property></object></child>
+            <child><object class="GtkLabel"><property name="label">210</property></object></child>
+            <child><object class="GtkLabel"><property name="label">211</property></object></child>
+            <child><object class="GtkLabel"><property name="label">212</property></object></child>
+            <child><object class="GtkLabel"><property name="label">213</property></object></child>
+            <child><object class="GtkLabel"><property name="label">214</property></object></child>
+            <child><object class="GtkLabel"><property name="label">215</property></object></child>
+            <child><object class="GtkLabel"><property name="label">216</property></object></child>
+            <child><object class="GtkLabel"><property name="label">217</property></object></child>
+            <child><object class="GtkLabel"><property name="label">218</property></object></child>
+            <child><object class="GtkLabel"><property name="label">219</property></object></child>
+            <child><object class="GtkLabel"><property name="label">220</property></object></child>
+            <child><object class="GtkLabel"><property name="label">221</property></object></child>
+            <child><object class="GtkLabel"><property name="label">222</property></object></child>
+            <child><object class="GtkLabel"><property name="label">223</property></object></child>
+            <child><object class="GtkLabel"><property name="label">224</property></object></child>
+            <child><object class="GtkLabel"><property name="label">225</property></object></child>
+            <child><object class="GtkLabel"><property name="label">226</property></object></child>
+            <child><object class="GtkLabel"><property name="label">227</property></object></child>
+            <child><object class="GtkLabel"><property name="label">228</property></object></child>
+            <child><object class="GtkLabel"><property name="label">229</property></object></child>
+            <child><object class="GtkLabel"><property name="label">230</property></object></child>
+            <child><object class="GtkLabel"><property name="label">231</property></object></child>
+            <child><object class="GtkLabel"><property name="label">232</property></object></child>
+            <child><object class="GtkLabel"><property name="label">233</property></object></child>
+            <child><object class="GtkLabel"><property name="label">234</property></object></child>
+            <child><object class="GtkLabel"><property name="label">235</property></object></child>
+            <child><object class="GtkLabel"><property name="label">236</property></object></child>
+            <child><object class="GtkLabel"><property name="label">237</property></object></child>
+            <child><object class="GtkLabel"><property name="label">238</property></object></child>
+            <child><object class="GtkLabel"><property name="label">239</property></object></child>
+            <child><object class="GtkLabel"><property name="label">240</property></object></child>
+            <child><object class="GtkLabel"><property name="label">241</property></object></child>
+            <child><object class="GtkLabel"><property name="label">242</property></object></child>
+            <child><object class="GtkLabel"><property name="label">243</property></object></child>
+            <child><object class="GtkLabel"><property name="label">244</property></object></child>
+            <child><object class="GtkLabel"><property name="label">245</property></object></child>
+            <child><object class="GtkLabel"><property name="label">246</property></object></child>
+            <child><object class="GtkLabel"><property name="label">247</property></object></child>
+            <child><object class="GtkLabel"><property name="label">248</property></object></child>
+            <child><object class="GtkLabel"><property name="label">249</property></object></child>
+            <child><object class="GtkLabel"><property name="label">250</property></object></child>
+            <child><object class="GtkLabel"><property name="label">251</property></object></child>
+            <child><object class="GtkLabel"><property name="label">252</property></object></child>
+            <child><object class="GtkLabel"><property name="label">253</property></object></child>
+            <child><object class="GtkLabel"><property name="label">254</property></object></child>
+            <child><object class="GtkLabel"><property name="label">255</property></object></child>
+            <child><object class="GtkLabel"><property name="label">256</property></object></child>
+            <child><object class="GtkLabel"><property name="label">257</property></object></child>
+            <child><object class="GtkLabel"><property name="label">258</property></object></child>
+            <child><object class="GtkLabel"><property name="label">259</property></object></child>
+            <child><object class="GtkLabel"><property name="label">260</property></object></child>
+            <child><object class="GtkLabel"><property name="label">261</property></object></child>
+            <child><object class="GtkLabel"><property name="label">262</property></object></child>
+            <child><object class="GtkLabel"><property name="label">263</property></object></child>
+            <child><object class="GtkLabel"><property name="label">264</property></object></child>
+            <child><object class="GtkLabel"><property name="label">265</property></object></child>
+            <child><object class="GtkLabel"><property name="label">266</property></object></child>
+            <child><object class="GtkLabel"><property name="label">267</property></object></child>
+            <child><object class="GtkLabel"><property name="label">268</property></object></child>
+            <child><object class="GtkLabel"><property name="label">269</property></object></child>
+            <child><object class="GtkLabel"><property name="label">270</property></object></child>
+            <child><object class="GtkLabel"><property name="label">271</property></object></child>
+            <child><object class="GtkLabel"><property name="label">272</property></object></child>
+            <child><object class="GtkLabel"><property name="label">273</property></object></child>
+            <child><object class="GtkLabel"><property name="label">274</property></object></child>
+            <child><object class="GtkLabel"><property name="label">275</property></object></child>
+            <child><object class="GtkLabel"><property name="label">276</property></object></child>
+            <child><object class="GtkLabel"><property name="label">277</property></object></child>
+            <child><object class="GtkLabel"><property name="label">278</property></object></child>
+            <child><object class="GtkLabel"><property name="label">279</property></object></child>
+            <child><object class="GtkLabel"><property name="label">280</property></object></child>
+            <child><object class="GtkLabel"><property name="label">281</property></object></child>
+            <child><object class="GtkLabel"><property name="label">282</property></object></child>
+            <child><object class="GtkLabel"><property name="label">283</property></object></child>
+            <child><object class="GtkLabel"><property name="label">284</property></object></child>
+            <child><object class="GtkLabel"><property name="label">285</property></object></child>
+            <child><object class="GtkLabel"><property name="label">286</property></object></child>
+            <child><object class="GtkLabel"><property name="label">287</property></object></child>
+            <child><object class="GtkLabel"><property name="label">288</property></object></child>
+            <child><object class="GtkLabel"><property name="label">289</property></object></child>
+            <child><object class="GtkLabel"><property name="label">290</property></object></child>
+            <child><object class="GtkLabel"><property name="label">291</property></object></child>
+            <child><object class="GtkLabel"><property name="label">292</property></object></child>
+            <child><object class="GtkLabel"><property name="label">293</property></object></child>
+            <child><object class="GtkLabel"><property name="label">294</property></object></child>
+            <child><object class="GtkLabel"><property name="label">295</property></object></child>
+            <child><object class="GtkLabel"><property name="label">296</property></object></child>
+            <child><object class="GtkLabel"><property name="label">297</property></object></child>
+            <child><object class="GtkLabel"><property name="label">298</property></object></child>
+            <child><object class="GtkLabel"><property name="label">299</property></object></child>
+            <child><object class="GtkLabel"><property name="label">300</property></object></child>
+            <child><object class="GtkLabel"><property name="label">301</property></object></child>
+            <child><object class="GtkLabel"><property name="label">302</property></object></child>
+            <child><object class="GtkLabel"><property name="label">303</property></object></child>
+            <child><object class="GtkLabel"><property name="label">304</property></object></child>
+            <child><object class="GtkLabel"><property name="label">305</property></object></child>
+            <child><object class="GtkLabel"><property name="label">306</property></object></child>
+            <child><object class="GtkLabel"><property name="label">307</property></object></child>
+            <child><object class="GtkLabel"><property name="label">308</property></object></child>
+            <child><object class="GtkLabel"><property name="label">309</property></object></child>
+            <child><object class="GtkLabel"><property name="label">310</property></object></child>
+            <child><object class="GtkLabel"><property name="label">311</property></object></child>
+            <child><object class="GtkLabel"><property name="label">312</property></object></child>
+            <child><object class="GtkLabel"><property name="label">313</property></object></child>
+            <child><object class="GtkLabel"><property name="label">314</property></object></child>
+            <child><object class="GtkLabel"><property name="label">315</property></object></child>
+            <child><object class="GtkLabel"><property name="label">316</property></object></child>
+            <child><object class="GtkLabel"><property name="label">317</property></object></child>
+            <child><object class="GtkLabel"><property name="label">318</property></object></child>
+            <child><object class="GtkLabel"><property name="label">319</property></object></child>
+            <child><object class="GtkLabel"><property name="label">320</property></object></child>
+            <child><object class="GtkLabel"><property name="label">321</property></object></child>
+            <child><object class="GtkLabel"><property name="label">322</property></object></child>
+            <child><object class="GtkLabel"><property name="label">323</property></object></child>
+            <child><object class="GtkLabel"><property name="label">324</property></object></child>
+            <child><object class="GtkLabel"><property name="label">325</property></object></child>
+            <child><object class="GtkLabel"><property name="label">326</property></object></child>
+            <child><object class="GtkLabel"><property name="label">327</property></object></child>
+            <child><object class="GtkLabel"><property name="label">328</property></object></child>
+            <child><object class="GtkLabel"><property name="label">329</property></object></child>
+            <child><object class="GtkLabel"><property name="label">330</property></object></child>
+            <child><object class="GtkLabel"><property name="label">331</property></object></child>
+            <child><object class="GtkLabel"><property name="label">332</property></object></child>
+            <child><object class="GtkLabel"><property name="label">333</property></object></child>
+            <child><object class="GtkLabel"><property name="label">334</property></object></child>
+            <child><object class="GtkLabel"><property name="label">335</property></object></child>
+            <child><object class="GtkLabel"><property name="label">336</property></object></child>
+            <child><object class="GtkLabel"><property name="label">337</property></object></child>
+            <child><object class="GtkLabel"><property name="label">338</property></object></child>
+            <child><object class="GtkLabel"><property name="label">339</property></object></child>
+            <child><object class="GtkLabel"><property name="label">340</property></object></child>
+            <child><object class="GtkLabel"><property name="label">341</property></object></child>
+            <child><object class="GtkLabel"><property name="label">342</property></object></child>
+            <child><object class="GtkLabel"><property name="label">343</property></object></child>
+            <child><object class="GtkLabel"><property name="label">344</property></object></child>
+            <child><object class="GtkLabel"><property name="label">345</property></object></child>
+            <child><object class="GtkLabel"><property name="label">346</property></object></child>
+            <child><object class="GtkLabel"><property name="label">347</property></object></child>
+            <child><object class="GtkLabel"><property name="label">348</property></object></child>
+            <child><object class="GtkLabel"><property name="label">349</property></object></child>
+            <child><object class="GtkLabel"><property name="label">350</property></object></child>
+            <child><object class="GtkLabel"><property name="label">351</property></object></child>
+            <child><object class="GtkLabel"><property name="label">352</property></object></child>
+            <child><object class="GtkLabel"><property name="label">353</property></object></child>
+            <child><object class="GtkLabel"><property name="label">354</property></object></child>
+            <child><object class="GtkLabel"><property name="label">355</property></object></child>
+            <child><object class="GtkLabel"><property name="label">356</property></object></child>
+            <child><object class="GtkLabel"><property name="label">357</property></object></child>
+            <child><object class="GtkLabel"><property name="label">358</property></object></child>
+            <child><object class="GtkLabel"><property name="label">359</property></object></child>
+            <child><object class="GtkLabel"><property name="label">360</property></object></child>
           </object>
         </child>
       </object>
-    </property>
+    </child>
   </object>
 </interface>

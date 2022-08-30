@@ -16,7 +16,7 @@ static GtkCssProvider *css_row_dark=NULL;
 static GtkCssProvider *css_row_light=NULL;
 GtkBuilder *builder=NULL;
 
-static GThread *th_scroll=NULL;
+GObject *scrolledwin_tanakh=NULL;
 
 static inline gboolean isMobile(){
   struct utsname name={0};
@@ -47,16 +47,9 @@ static inline void click_keep_bg(GtkWidget *const widget){
 }
 
 static void toggle_cb(/*__attribute__((unused)) */GtkToggleButton* self, gpointer user_data){
-
-  // g_assert_true(user_data);
-  // const glong n=*((glong*)user_data); g_assert_true(1<=n);
   const glong n=(glong)user_data; g_assert_true(1<=n && n<=tanakh.n_total_chapters);
-  // g_message("GtkToggleButton::toggled [%ld]", n);
-
   bs_toggle(bs_tanakh, n, gtk_toggle_button_get_active(self));
-  // g_message("GtkToggleButton::toggled [%ld] ?->%s", n, gtk_toggle_button_get_active(self)?"O":".");
   // bs_test(bs_tanakh);
-
 }
 
 static inline void add_book(GtkWidget *const flowbox, const bc_book_t *const book, glong *const chapter_counter){
@@ -66,12 +59,21 @@ static inline void add_book(GtkWidget *const flowbox, const bc_book_t *const boo
     gtk_widget_set_halign(tb, GTK_ALIGN_FILL);
     gtk_widget_set_hexpand(tb, FALSE);
     ++(*chapter_counter);
-    // the following 3 lines must remain in order
-    if(bs_get(bs_tanakh, *chapter_counter)) // 1
-      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(tb), TRUE); // 2
-    g_signal_connect(tb, "toggled", G_CALLBACK(toggle_cb),(gpointer)(*chapter_counter)); // 3
+    if(bs_get(bs_tanakh, *chapter_counter)) // 1/3
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(tb), TRUE); // 2/3
+    g_signal_connect(tb, "toggled", G_CALLBACK(toggle_cb),(gpointer)(*chapter_counter)); // 3/3
     gtk_flow_box_append(GTK_FLOW_BOX(flowbox), tb);
   }
+}
+
+static gboolean ia_scroll(const gpointer garbage){
+  g_assert_true(!garbage);
+  g_assert_true(scrolledwin_tanakh);
+  GtkAdjustment *const gadj=gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(scrolledwin_tanakh));
+  g_print("%lf\n", gtk_adjustment_get_upper(gadj));
+  // gtk_adjustment_set_value(gadj, 1169.0f);
+  // gtk_scrolled_window_set_vadjustment(GTK_SCROLLED_WINDOW(scrolledwin_tanakh), gadj);
+  return FALSE;
 }
 
 static inline void add_testament(GtkBox *const box, const bc_testament_t *const testament){
@@ -114,6 +116,7 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
           g_assert_true(contents==g_strchomp(contents)); // chomp chug strip
           if(0==g_strcmp0(b->title, contents)){
             adw_expander_row_set_expanded(ADW_EXPANDER_ROW(aer), TRUE);
+            // focus=aer
           }
 
           g_free(contents); contents=NULL; length=0;
@@ -145,43 +148,31 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
 }
 
 static gboolean cb_close(GtkWindow *const self, __attribute__((unused)) gpointer user_data){
-
-  g_assert_true(th_scroll);
-  // g_assert_true(!g_thread_join(th_scroll));
-  // th_scroll=NULL;
-
-  // g_message("closed");
   gtk_window_destroy(self); // is it necessary?
   bs_save(bs_tanakh, tanakh.progress);
   return FALSE;
-
 }
 
-static gpointer show_v_adj(const gpointer data){
-  g_assert_true(g_type_check_instance_is_a(data, GTK_TYPE_SCROLLED_WINDOW));
+// static gpointer show_v_adj(const gpointer data){
+//   g_assert_true(g_type_check_instance_is_a(data, GTK_TYPE_SCROLLED_WINDOW));
 
-  sleep(1);
-  GtkAdjustment *const gadj=gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(data));
-  gtk_adjustment_set_value(gadj, 1169.0f);
-  gtk_scrolled_window_set_vadjustment(GTK_SCROLLED_WINDOW(data), gadj);
+//   sleep(1);
+//   GtkAdjustment *const gadj=gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(data));
+//   gtk_adjustment_set_value(gadj, 1169.0f);
+//   gtk_scrolled_window_set_vadjustment(GTK_SCROLLED_WINDOW(data), gadj);
 
-  // for(;;){
-  //   sleep(1);
-  //   GtkAdjustment *const gadj=gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(data));
-  //   g_print("%lf\n", gtk_adjustment_get_upper(gadj));
-  //   g_print("%lf\n", gtk_adjustment_get_value(gadj));
-  //   g_print("%lf\n", gtk_adjustment_get_lower(gadj));
-  //   g_print("\n");
-  // }
+//   // for(;;){
+//   //   sleep(1);
+//   //   GtkAdjustment *const gadj=gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(data));
+//   //   g_print("%lf\n", gtk_adjustment_get_upper(gadj));
+//   //   g_print("%lf\n", gtk_adjustment_get_value(gadj));
+//   //   g_print("%lf\n", gtk_adjustment_get_lower(gadj));
+//   //   g_print("\n");
+//   // }
 
-  // g_thread_exit
-  return NULL;
-}
-
-static void cb_scroll(GtkWidget *const self, const gpointer user_data){
-  g_assert_true(!user_data);
-  th_scroll=g_thread_new("th_scroll", show_v_adj, self); g_assert_true(th_scroll);
-}
+//   // g_thread_exit
+//   return NULL;
+// }
 
 void ui_app_activate_cb(AdwApplication *app){
 
@@ -217,9 +208,9 @@ void ui_app_activate_cb(AdwApplication *app){
   GObject *const box_tanakh=gtk_builder_get_object(builder, "qgnxl8"); g_assert_true(box_tanakh);
   add_testament(GTK_BOX(box_tanakh), &tanakh);
 
-  GObject *const scrolledwin_tanakh=gtk_builder_get_object(builder, "qbtw37"); g_assert_true(box_tanakh);
-  g_signal_connect(scrolledwin_tanakh, "realize", G_CALLBACK(cb_scroll), NULL);
-  // g_signal_connect(scrolledwin_tanakh, "map", G_CALLBACK(cb_scroll), NULL);
+  g_assert_true(!scrolledwin_tanakh);
+  scrolledwin_tanakh=gtk_builder_get_object(builder, "qbtw37");
+  g_assert_true(scrolledwin_tanakh);
 
   GObject *const win=gtk_builder_get_object(builder, "tf2fhx"); g_assert_true(win);
   g_signal_connect(win, "close-request", G_CALLBACK(cb_close), NULL);
@@ -231,12 +222,7 @@ void ui_app_activate_cb(AdwApplication *app){
   gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(win));
 
   gtk_widget_show(GTK_WIDGET(win)); // gtk_window_present(GTK_WINDOW(win));
-
-  // GtkFlowBox no animation
-  // GObject *const fb=gtk_builder_get_object(builder, "dx7fws"); g_assert_true(fb);
-  // gulong signalID=g_signal_lookup("child-activated", gtk_flow_box_get_type());
-  // g_assert_true(1<signalID && signalID<(gulong)(-2));
-  // g_assert_true(0==g_signal_handlers_disconnect_matched(fb, G_SIGNAL_MATCH_ID, signalID, 0, NULL, NULL, NULL));
+  /*const guint _=*/g_idle_add(ia_scroll, NULL);
 
 }
 
