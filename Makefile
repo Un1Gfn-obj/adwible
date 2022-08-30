@@ -13,9 +13,9 @@ default: b
 
 # postbuild.transfer
 t: builddir.aarch64/adwible
-	ip -o -4 addr show dev enp0s20f0u2 | grep inet >/dev/null || sudo dhcpcd enp0s20f0u2
-	ssh root@wt88047usb rm -fv /usr/local/bin/$^
-	scp $^ root@wt88047usb:/usr/local/bin/
+# 	ip -o -4 addr show dev enp0s20f0u2 | grep inet >/dev/null || sudo dhcpcd enp0s20f0u2
+	ssh root@wt88047wlan0 rm -fv /usr/local/bin/$^
+	scp $^ root@wt88047wlan0:/usr/local/bin/
 
 # postbuild.valgrind
 v: b

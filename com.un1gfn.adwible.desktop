@@ -1,0 +1,6 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Name=Adwible
+Exec=/usr/local/bin/adwible
+Icon=help-contents-symbolic

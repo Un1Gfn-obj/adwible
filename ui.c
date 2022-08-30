@@ -16,7 +16,9 @@ static GResource *gres=NULL;
 static GtkCssProvider *css_row_dark=NULL;
 static GtkCssProvider *css_row_light=NULL;
 static GtkBuilder *builder=NULL;
+
 static const char *autoexpand=NULL;
+static gboolean do_scroll=FALSE;
 
 typedef struct {
   glong n; // current chapter
@@ -130,6 +132,7 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
           adw_expander_row_set_expanded(ADW_EXPANDER_ROW(aer), TRUE);
           scroll_aer=aer;
           scroll_apg=apg;
+          do_scroll=TRUE;
         }
       }
 
@@ -208,7 +211,8 @@ void ui_app_activate_cb(AdwApplication *app){
   gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(win));
 
   gtk_widget_show(GTK_WIDGET(win)); // gtk_window_present(GTK_WINDOW(win));
-  scroll_dispatch();
+  if(do_scroll)
+    scroll_dispatch();
 
 }
 
