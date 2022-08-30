@@ -51,6 +51,7 @@ executable(meson.project_name(),
   'ui.c',
   'bc.c',
   'bs.c',
+  'scroll.c',
   ck3fm7_res,
   dependencies: [
     dependency('gtk4'),

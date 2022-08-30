@@ -3,6 +3,7 @@
 #include <gio/gio.h> // GResource
 #include <sys/utsname.h> // uname
 
+#include "scroll.h"
 #include "ck3fm7.h" // j72qkd_get_resource
 #include "bc.h" // biblical canon
 #include "bs.h" // bitset
@@ -15,8 +16,6 @@ static GResource *gres=NULL;
 static GtkCssProvider *css_row_dark=NULL;
 static GtkCssProvider *css_row_light=NULL;
 GtkBuilder *builder=NULL;
-
-GObject *scrolledwin_tanakh=NULL;
 
 static inline gboolean isMobile(){
   struct utsname name={0};
@@ -64,16 +63,6 @@ static inline void add_book(GtkWidget *const flowbox, const bc_book_t *const boo
     g_signal_connect(tb, "toggled", G_CALLBACK(toggle_cb),(gpointer)(*chapter_counter)); // 3/3
     gtk_flow_box_append(GTK_FLOW_BOX(flowbox), tb);
   }
-}
-
-static gboolean ia_scroll(const gpointer garbage){
-  g_assert_true(!garbage);
-  g_assert_true(scrolledwin_tanakh);
-  GtkAdjustment *const gadj=gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(scrolledwin_tanakh));
-  g_print("%lf\n", gtk_adjustment_get_upper(gadj));
-  // gtk_adjustment_set_value(gadj, 1169.0f);
-  // gtk_scrolled_window_set_vadjustment(GTK_SCROLLED_WINDOW(scrolledwin_tanakh), gadj);
-  return FALSE;
 }
 
 static inline void add_testament(GtkBox *const box, const bc_testament_t *const testament){
@@ -153,27 +142,6 @@ static gboolean cb_close(GtkWindow *const self, __attribute__((unused)) gpointer
   return FALSE;
 }
 
-// static gpointer show_v_adj(const gpointer data){
-//   g_assert_true(g_type_check_instance_is_a(data, GTK_TYPE_SCROLLED_WINDOW));
-
-//   sleep(1);
-//   GtkAdjustment *const gadj=gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(data));
-//   gtk_adjustment_set_value(gadj, 1169.0f);
-//   gtk_scrolled_window_set_vadjustment(GTK_SCROLLED_WINDOW(data), gadj);
-
-//   // for(;;){
-//   //   sleep(1);
-//   //   GtkAdjustment *const gadj=gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(data));
-//   //   g_print("%lf\n", gtk_adjustment_get_upper(gadj));
-//   //   g_print("%lf\n", gtk_adjustment_get_value(gadj));
-//   //   g_print("%lf\n", gtk_adjustment_get_lower(gadj));
-//   //   g_print("\n");
-//   // }
-
-//   // g_thread_exit
-//   return NULL;
-// }
-
 void ui_app_activate_cb(AdwApplication *app){
 
   //        +---------+
@@ -197,20 +165,10 @@ void ui_app_activate_cb(AdwApplication *app){
   // https://gitlab.gnome.org/GNOME/libadwaita/-/blob/1.1.4/demo/adw-demo-window.c#L118
   // g_type_ensure(...);
   // adw_init();
-
-  // GtkBuilder *x[]={
-  //   gtk_builder_new_from_resource("/com/un1gfn/ck3fm7/adwible.ui"),
-  //   gtk_builder_new_from_resource("/com/un1gfn/ck3fm7/demo.ui"),
-  // };
-  // _Static_assert(sizeof(x)==2*sizeof(void*));
-  // for(gsize i=0; i<sizeof(x)/sizeof(void*); ++i){
-
   GObject *const box_tanakh=gtk_builder_get_object(builder, "qgnxl8"); g_assert_true(box_tanakh);
   add_testament(GTK_BOX(box_tanakh), &tanakh);
 
-  g_assert_true(!scrolledwin_tanakh);
-  scrolledwin_tanakh=gtk_builder_get_object(builder, "qbtw37");
-  g_assert_true(scrolledwin_tanakh);
+  GObject *sw=gtk_builder_get_object(builder, "qbtw37"); g_assert_true(sw); scroll_init(sw); // GtkScrolledWindow
 
   GObject *const win=gtk_builder_get_object(builder, "tf2fhx"); g_assert_true(win);
   g_signal_connect(win, "close-request", G_CALLBACK(cb_close), NULL);
@@ -222,7 +180,7 @@ void ui_app_activate_cb(AdwApplication *app){
   gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(win));
 
   gtk_widget_show(GTK_WIDGET(win)); // gtk_window_present(GTK_WINDOW(win));
-  /*const guint _=*/g_idle_add(ia_scroll, NULL);
+  scroll_dispatch();
 
 }
 
@@ -282,3 +240,24 @@ void ui_unregister_gres(){
 // GValue v={0}; g_assert_true(&v==g_value_init(&v, G_TYPE_STRING));
 // g_value_set_static_string(&v, g->title); g_assert_true(G_VALUE_HOLDS_STRING(&v));
 // g_object_set_property(G_OBJECT(apg), "title", &v);
+
+// static gpointer show_v_adj(const gpointer data){
+//   g_assert_true(g_type_check_instance_is_a(data, GTK_TYPE_SCROLLED_WINDOW));
+
+//   sleep(1);
+//   GtkAdjustment *const gadj=gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(data));
+//   gtk_adjustment_set_value(gadj, 1169.0f);
+//   gtk_scrolled_window_set_vadjustment(GTK_SCROLLED_WINDOW(data), gadj);
+
+//   // for(;;){
+//   //   sleep(1);
+//   //   GtkAdjustment *const gadj=gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(data));
+//   //   g_print("%lf\n", gtk_adjustment_get_upper(gadj));
+//   //   g_print("%lf\n", gtk_adjustment_get_value(gadj));
+//   //   g_print("%lf\n", gtk_adjustment_get_lower(gadj));
+//   //   g_print("\n");
+//   // }
+
+//   // g_thread_exit
+//   return NULL;
+// }
