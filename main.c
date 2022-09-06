@@ -21,8 +21,9 @@ int g_application_run2(ARGPARA){
 int main(ARGPARA){
 
   // backend
-  bc_init();
   bs_init();
+  bc_check(&tanakh);
+  bc_check(&nt);
 
   g_assert_true(0==chdir(g_get_user_config_dir()));
   gchar *curd=g_get_current_dir(); // g_canonicalize_filename

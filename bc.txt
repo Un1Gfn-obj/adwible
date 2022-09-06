@@ -1,3 +1,5 @@
+================================================================================
+
 # REF.BOTH
 # https://app.bible.com/app-ios
 # https://www.biblegateway.com/passage/?search=Genesis+1&version=NLT
@@ -12,8 +14,9 @@
 # https://en.wikipedia.org/wiki/Template:Books_of_the_New_Testament
 # https://en.wikipedia.org/wiki/New_Testament#New_Testament_canons
 # https://en.wikipedia.org/wiki/Biblical_canon#Table_2
-
 # https://la.wikipedia.org/wiki/Novum_Testamentum
+
+================================================================================
 
 [Tanakh/OT]
 
@@ -70,3 +73,50 @@ Minor - Trei Asar
   2  "Haggai"     "10 Haggay"
  14  "Zechariah"  "11 Zəkarya"
   4  "Malachi"    "12 Malaki"
+
+================================================================================
+
+[NT]
+
+"Canonical gospels", "Quattuor Evangelia"
+
+  28 , "Matthew" , "Evangelium secundum Matthaeum"
+  16 , "Mark"    , "Evangelium secundum Marcum"
+  24 , "Luke"    , "Evangelium secundum Lucam"
+  21 , "John"    , "Evangelium secundum Ioannem"
+
+"Acts of apostles", "Actus Apostolorum"
+
+  28 , "Acts" , "Actus"
+
+"Pauline epistles", "Epistulae Paulinae"
+
+  16 , "Romans"          , "Epistula ad Romanos"
+  16 , "1 Corinthians"   , "Epistula I ad Corinthios"
+  13 , "2 Corinthians"   , "Epistula II ad Corinthios"
+   6 , "Galatians"       , "Epistula ad Galatas"
+   6 , "Ephesians"       , "Epistula ad Ephesios"
+   4 , "Philippians"     , "Epistula ad Philippenses"
+   4 , "Colossians"      , "Epistula ad Colossenses"
+   5 , "1 Thessalonians" , "Epistula I ad Thessalonicenses"
+   3 , "2 Thessalonians" , "Epistula II ad Thessalonicenses"
+   6 , "1 Timothy"       , "Epistula I ad Timotheum"
+   4 , "2 Timothy"       , "Epistula II ad Timotheum"
+   3 , "Titus"           , "Epistula ad Titum"
+   1 , "Philemon"        , "Epistulam ad Philemonem"
+
+"Catholic epistles" , "Epistulae catholicae"
+
+  13 , "Hebrews" , "Epistula ad Hebraeos"
+   5 , "James"   , "Epistula Iacobi"
+   5 , "1 Peter" , "Epistula I Petri"
+   3 , "2 Peter" , "Epistula II Petri"
+   5 , "1 John"  , "Epistula I Ioannis"
+   1 , "2 John"  , "Epistula II Ioannis"
+   1 , "3 John"  , "Epistula III Ioannis"
+   1 , "Jude"    , "Epistula Iudae"
+
+"Apocalypse" , "Apocalypsis"
+
+  22 , "Revelation" , "Apocalypsis Ioannis / Apokalypsis"
+

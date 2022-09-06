@@ -41,6 +41,6 @@ struct bc_book_s {
 
 // old testament
 extern const bc_testament_t tanakh;
-extern bitset_t *bs_tanakh;
+extern const bc_testament_t nt;
 
-extern void bc_init();
+void bc_check(const bc_testament_t *const);

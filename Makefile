@@ -6,7 +6,7 @@ N:=ninja -j4 -v -C $(O)
 # GOBJECT_DEBUG=instance-count 
 E:=HTTPS_PROXY=http://127.0.0.1:8080/ 
 NODOWNLOAD:=DEBUGINFOD_URLS="/dev/null"
-V:=/bin/valgrind -v --keep-debuginfo=yes --leak-check=full --suppressions=/usr/share/gtk-4.0/valgrind/gtk.supp
+V:=/bin/valgrind -v --keep-debuginfo=yes --leak-check=full --suppressions=/usr/share/gtk-4.0/valgrind/gtk.supp --suppressions=/usr/share/glib-2.0/valgrind/glib.supp
 VL:=/tmp/valgrind.log
 
 default: b

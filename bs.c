@@ -17,6 +17,8 @@ struct bitset_s {
   seg_t *b;
 };
 
+bitset_t *bs_tanakh=NULL;
+
 static inline seg_t *locate(bitset_t *bs, const glong i){
   // g_message("%d %ld %d", 1, i, (bs->n_bits)-1);
   g_assert_true(1<=i && i<=(bs->n_bits)-1); // #0 is reserver

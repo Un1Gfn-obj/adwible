@@ -3,6 +3,7 @@
 
 // this type is incomplete on purpose
 typedef struct bitset_s bitset_t;
+extern bitset_t *bs_tanakh;
 
 void bs_init();
 bitset_t *bs_new(const int);

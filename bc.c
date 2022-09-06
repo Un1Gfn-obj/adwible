@@ -9,8 +9,6 @@
 #define NULLBOOK 0,NULL,NULL
 #define NULLGRP 0,NULL,NULL,NULL
 
-bitset_t *bs_tanakh=NULL;
-
 // old testament
 const bc_testament_t tanakh={
   .progress="./tanakh.bin",
@@ -105,11 +103,88 @@ const bc_testament_t tanakh={
   }
 };
 
-void bc_init(){
+const bc_testament_t nt={
+  .progress="./nt.bin",
+  .autoexpand="./nt.expand",
+  // https://justwordministries.com/wp-content/uploads/2020/02/Bible-Books-Chapters-and-Verses-Chart.pdf
+  .n_total_groups=5,
+  .n_total_books=27,
+  .n_total_chapters=260,
+  .groups=(bc_group_t[]){
+    {
+      4,
+      "Canonical gospels",
+      "Quattuor Evangelia",
+      (bc_book_t[]){
+        { 28 , "Matthew" , "Evangelium secundum Matthaeum" },
+        { 16 , "Mark"    , "Evangelium secundum Marcum"    },
+        { 24 , "Luke"    , "Evangelium secundum Lucam"     },
+        { 21 , "John"    , "Evangelium secundum Ioannem"   },
+        { NULLBOOK }
+      }
+    },
+    {
+      1,
+      "Acts of apostles",
+      "Actus Apostolorum",
+      (bc_book_t[]){
+        { 28 , "Acts" , "Actus" },
+        { NULLBOOK }
+      }
+    },
+    {
+      13,
+      "Pauline epistles",
+      "Epistulae Paulinae",
+      (bc_book_t[]){
+        { 16 , "Romans"          , "Epistula ad Romanos"             },
+        { 16 , "1 Corinthians"   , "Epistula I ad Corinthios"        },
+        { 13 , "2 Corinthians"   , "Epistula II ad Corinthios"       },
+        {  6 , "Galatians"       , "Epistula ad Galatas"             },
+        {  6 , "Ephesians"       , "Epistula ad Ephesios"            },
+        {  4 , "Philippians"     , "Epistula ad Philippenses"        },
+        {  4 , "Colossians"      , "Epistula ad Colossenses"         },
+        {  5 , "1 Thessalonians" , "Epistula I ad Thessalonicenses"  },
+        {  3 , "2 Thessalonians" , "Epistula II ad Thessalonicenses" },
+        {  6 , "1 Timothy"       , "Epistula I ad Timotheum"         },
+        {  4 , "2 Timothy"       , "Epistula II ad Timotheum"        },
+        {  3 , "Titus"           , "Epistula ad Titum"               },
+        {  1 , "Philemon"        , "Epistulam ad Philemonem"         },
+        { NULLBOOK }
+      }
+    },
+    {
+      8,
+      "Catholic epistles",
+      "Epistulae catholicae",
+      (bc_book_t[]){
+        {  13 , "Hebrews" , "Epistula ad Hebraeos" },
+        {   5 , "James"   , "Epistula Iacobi"      },
+        {   5 , "1 Peter" , "Epistula I Petri"     },
+        {   3 , "2 Peter" , "Epistula II Petri"    },
+        {   5 , "1 John"  , "Epistula I Ioannis"   },
+        {   1 , "2 John"  , "Epistula II Ioannis"  },
+        {   1 , "3 John"  , "Epistula III Ioannis" },
+        {   1 , "Jude"    , "Epistula Iudae"       },
+        { NULLBOOK }
+      }
+    },
+    {
+      1,
+      "Apocalypse",
+      "Apocalypsis",
+      (bc_book_t[]){
+        { 22 , "Revelation" , "Apocalypsis Ioannis / Apokalypsis" },
+        { NULLBOOK }
+      }
+    },
+  }
+};
 
+void bc_check(const bc_testament_t *const t){
   int cnt_books=0;
   int cnt_chapters=0;
-  const bc_group_t *g=tanakh.groups;
+  const bc_group_t *g=t->groups;
   for(; 0!=g->n_books; ++g){
     cnt_books+=g->n_books;
     const bc_book_t *b=g->books;
@@ -117,12 +192,10 @@ void bc_init(){
       cnt_chapters+=b->n_chapters;
     g_assert_true(g->n_books==b-g->books);
   }
-  g_assert_true(tanakh.n_total_groups   == g-tanakh.groups);
-  g_assert_true(tanakh.n_total_books    == cnt_books);
-  g_assert_true(tanakh.n_total_chapters == cnt_chapters);
-
+  g_assert_true(t->n_total_groups   == g-t->groups);
+  g_assert_true(t->n_total_books    == cnt_books);
+  g_assert_true(t->n_total_chapters == cnt_chapters);
 }
-
 
 // #define A 27158, 12200, 24510
 // #define N 32032
