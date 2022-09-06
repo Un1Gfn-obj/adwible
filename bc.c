@@ -9,10 +9,14 @@
 #define NULLBOOK 0,NULL,NULL
 #define NULLGRP 0,NULL,NULL,NULL
 
+static bc_dyn_t dyn_tanakh={0};
+static bc_dyn_t dyn_nt={0};
+
 // old testament
-const bc_testament_t tanakh={
-  .progress="./tanakh.bin",
-  .autoexpand="./tanakh.expand",
+const bc_testament_t bc_tanakh={
+  .dyn=&dyn_tanakh,
+  .fn_progress="./tanakh.bin",
+  .fn_autoexpand="./tanakh.expand",
   // https://justwordministries.com/wp-content/uploads/2020/02/Bible-Books-Chapters-and-Verses-Chart.pdf
   .n_total_groups=5,
   .n_total_books=39,
@@ -103,9 +107,10 @@ const bc_testament_t tanakh={
   }
 };
 
-const bc_testament_t nt={
-  .progress="./nt.bin",
-  .autoexpand="./nt.expand",
+const bc_testament_t bc_newtestament={
+  .dyn=&dyn_nt,
+  .fn_progress="./newtestament.bin",
+  .fn_autoexpand="./newtestament.expand",
   // https://justwordministries.com/wp-content/uploads/2020/02/Bible-Books-Chapters-and-Verses-Chart.pdf
   .n_total_groups=5,
   .n_total_books=27,
@@ -181,7 +186,7 @@ const bc_testament_t nt={
   }
 };
 
-void bc_check(const bc_testament_t *const t){
+void bc_init(const bc_testament_t *const t){
   int cnt_books=0;
   int cnt_chapters=0;
   const bc_group_t *g=t->groups;
@@ -195,6 +200,11 @@ void bc_check(const bc_testament_t *const t){
   g_assert_true(t->n_total_groups   == g-t->groups);
   g_assert_true(t->n_total_books    == cnt_books);
   g_assert_true(t->n_total_chapters == cnt_chapters);
+
+  t->dyn->bs=bs_new(t->n_total_chapters+1);
+  bs_load(t->dyn->bs, t->fn_progress);
+  // bs_test(t->dyn->bs);
+
 }
 
 // #define A 27158, 12200, 24510

@@ -17,8 +17,6 @@ struct bitset_s {
   seg_t *b;
 };
 
-bitset_t *bs_tanakh=NULL;
-
 static inline seg_t *locate(bitset_t *bs, const glong i){
   // g_message("%d %ld %d", 1, i, (bs->n_bits)-1);
   g_assert_true(1<=i && i<=(bs->n_bits)-1); // #0 is reserver
@@ -46,6 +44,11 @@ void bs_init(){
   const guint32 l=g_rand_int(rng);
   g_assert_true(l!=htonl(l));
   g_assert_true(l==ntohl(htonl(l)));
+
+  gchar *curd=g_get_current_dir(); // g_canonicalize_filename
+  // g_message("%s", curd);
+  g_assert_true(0==g_strcmp0("/home/user/.config/adwible", curd) || 0==g_strcmp0("/home/darren/.config/adwible", curd));
+  g_free(curd); curd=NULL;
 
 }
 
@@ -108,7 +111,8 @@ void bs_save(const bitset_t *const bs, const gchar *const filename){
   // GLib.file_set_contents()
   // GLib.file_set_contents_full()
   g_assert_true(g_file_set_contents_full(filename, bs->b, bs->n_segs, G_FILE_SET_CONTENTS_CONSISTENT, 0644, NULL));
-  g_message("'%s' saved.", filename);
+  // g_message("'%s' saved.", filename);
+  g_message("'%s' saved (%d segs %d bits).", filename, bs->n_segs, bs->n_bits);
 
   // // back up old file (rename/copy?)
   // adwible."$(date +%s)".bak
@@ -159,9 +163,24 @@ void bs_load(bitset_t *const bs, const gchar *const filename){
     g_assert_true(e);
     g_assert_true(G_FILE_ERROR==e->domain);
     g_assert_true(G_FILE_ERROR_NOENT==e->code);
+
+    // char *dir=get_current_dir_name();
+    // g_message("%s", dir);
+    // free(dir);
     // g_warning("[EE] %s", e->message);
+
     g_error_free(e); e=NULL;
     g_message("%s not found, starting over...", filename);
   }
 
+}
+
+void bs_chdir(){
+  g_assert_true(0==chdir(g_get_user_config_dir()));
+  gchar *curd=g_get_current_dir(); // g_canonicalize_filename
+  g_assert_true(curd);
+  g_assert_true(0==g_strcmp0("/home/user/.config", curd) || 0==g_strcmp0("/home/darren/.config", curd));
+  g_free(curd); curd=NULL;
+  g_assert_true(0==g_mkdir_with_parents("./adwible", 0755));
+  g_assert_true(0==chdir("./adwible")); 
 }

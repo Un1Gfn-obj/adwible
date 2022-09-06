@@ -17,22 +17,18 @@ static GtkCssProvider *css_row_dark=NULL;
 static GtkCssProvider *css_row_light=NULL;
 static GtkBuilder *builder=NULL;
 
-static const char *autoexpand=NULL;
-static gboolean do_scroll=FALSE;
-
 typedef struct {
-  glong n; // current chapter
-  const char *t; // current book group
-} cb_toggle_t;
+  const bc_testament_t *t; // testament
+  glong curchp; // current chapter
+  const char *curgrp; // current book group
+} cb_togglebutton_t;
 
 static void cb_togglebutton(GtkToggleButton* self, gpointer data){
-  cb_toggle_t *p=(cb_toggle_t*)data;
-  // g_print("%ld\n", p->n);
-  g_assert_true(1<=(p->n) && (p->n)<=tanakh.n_total_chapters);
-  bs_toggle(bs_tanakh, p->n, gtk_toggle_button_get_active(self));
-  // g_print("%s\n", p->t);
-  g_assert_true(p->t); autoexpand=p->t;
-  // bs_test(bs_tanakh);
+  const cb_togglebutton_t *const p=(cb_togglebutton_t*)data;
+  const bc_testament_t *const t=p->t;
+  g_assert_true(1<=(p->curchp) && (p->curchp)<=t->n_total_chapters);
+  bs_toggle(t->dyn->bs, p->curchp, gtk_toggle_button_get_active(self));
+  g_assert_true(p->curgrp); t->dyn->autoexpand=p->curgrp;
 }
 
 // try g_signal_connect_closure?
@@ -40,15 +36,20 @@ static void cb_togglebutton_destroy(__attribute__((unused)) GtkToggleButton* sel
   g_free(data); data=NULL;
 }
 
+static void sync0(const bc_testament_t *const t){
+  bs_save(t->dyn->bs, t->fn_progress);
+  if(t->dyn->autoexpand){
+    g_message("'%s' saved", t->fn_autoexpand);
+    g_assert_true(g_file_set_contents_full(t->fn_autoexpand, t->dyn->autoexpand, -1, G_FILE_SET_CONTENTS_CONSISTENT, 0644, NULL));
+  }
+}
+
 // bind to a floating button in GtkOverlay
 // show an AdwToast on success
 void cb_sync(__attribute__((unused)) GtkButton *self, gpointer _){
   g_assert_true(!_);
-  bs_save(bs_tanakh, tanakh.progress);
-  if(autoexpand){
-    g_message("'%s' saved", tanakh.autoexpand);
-    g_assert_true(g_file_set_contents_full(tanakh.autoexpand, autoexpand, -1, G_FILE_SET_CONTENTS_CONSISTENT, 0644, NULL));
-  }
+  sync0(&bc_tanakh);
+  sync0(&bc_newtestament);
 }
 
 static gboolean cb_close(GtkWindow *const self, gpointer _){
@@ -86,7 +87,7 @@ static inline void click_keep_bg(GtkWidget *const widget){
     gtk_style_context_add_provider(styct, GTK_STYLE_PROVIDER(css_row_light), GTK_STYLE_PROVIDER_PRIORITY_USER); // apply css
 }
 
-static inline void add_testament(GtkBox *const box, const bc_testament_t *const testament){
+static inline void add_testament(GtkBox *const box, const bc_testament_t *const t){
 
   glong cur_chapter=0; _Static_assert(sizeof(gpointer)==sizeof(glong), "");
 
@@ -98,10 +99,10 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
   GError *e=NULL;
 
   // GLib.file_get_contents()
-  if(g_file_get_contents(testament->autoexpand, &contents, &length, &e)){
+  if(g_file_get_contents(t->fn_autoexpand, &contents, &length, &e)){
     g_assert_true(contents);
     g_assert_true(contents==g_strchomp(contents)); // chomp chug strip
-    g_message("'%s' loaded", testament->autoexpand);
+    g_message("'%s' loaded", t->fn_autoexpand);
   }else{
     g_assert_true(e);
     g_assert_true(G_FILE_ERROR==e->domain);
@@ -109,7 +110,7 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
     g_error_free(e); e=NULL;
   }
 
-  for(const bc_group_t *g=testament->groups; 0!=g->n_books; ++g){ // BEGIN LOOP groups in a testament
+  for(const bc_group_t *g=t->groups; 0!=g->n_books; ++g){ // BEGIN LOOP groups in a testament
 
     // [AdwPreferencesGroup] AdwExpanderRow GtkListBoxRow GtkFlowBox
     apg=adw_preferences_group_new();
@@ -131,9 +132,9 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
         if(0==g_strcmp0(b->title, contents)){
           g_message("'%s' expanded", contents);
           adw_expander_row_set_expanded(ADW_EXPANDER_ROW(aer), TRUE);
-          scroll_aer=aer;
-          scroll_apg=apg;
-          do_scroll=TRUE;
+          t->dyn->scroll_do=TRUE;
+          t->dyn->scroll_aer=aer;
+          t->dyn->scroll_apg=apg;
         }
       }
 
@@ -148,10 +149,10 @@ static inline void add_testament(GtkBox *const box, const bc_testament_t *const 
           gtk_widget_set_halign(tb, GTK_ALIGN_FILL);
           gtk_widget_set_hexpand(tb, FALSE);
           ++cur_chapter;
-          if(bs_get(bs_tanakh, cur_chapter)) // 1/3
+          if(bs_get(t->dyn->bs, cur_chapter)) // 1/3
             gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(tb), TRUE); // 2/3
-          cb_toggle_t *const cb_data=g_new0(cb_toggle_t, 1);
-          *cb_data=(cb_toggle_t){.n=cur_chapter, .t=b->title};
+          cb_togglebutton_t *const cb_data=g_new0(cb_togglebutton_t, 1);
+          *cb_data=(cb_togglebutton_t){.t=t, .curchp=cur_chapter, .curgrp=b->title};
           g_signal_connect(tb, "toggled", G_CALLBACK(cb_togglebutton), cb_data); // 3/3
           g_signal_connect(tb, "destroy", G_CALLBACK(cb_togglebutton_destroy), cb_data); // 3/3
           gtk_flow_box_append(GTK_FLOW_BOX(fb), tb);
@@ -197,12 +198,15 @@ void ui_app_activate_cb(AdwApplication *app){
   // https://gitlab.gnome.org/GNOME/libadwaita/-/blob/1.1.4/demo/adw-demo-window.c#L118
   // g_type_ensure(...);
   // adw_init();
-  GObject *const box_tanakh=gtk_builder_get_object(builder, "qgnxl8"); g_assert_true(box_tanakh);
-  add_testament(GTK_BOX(box_tanakh), &tanakh);
+  GObject *const box_tanakh=gtk_builder_get_object(builder, "gb_tanakh"); g_assert_true(box_tanakh);
+  GObject *const box_newtestament=gtk_builder_get_object(builder, "gb_newtestament"); g_assert_true(box_newtestament);
+  add_testament(GTK_BOX(box_tanakh), &bc_tanakh);
+  add_testament(GTK_BOX(box_newtestament), &bc_newtestament);
 
-  GObject *sw=gtk_builder_get_object(builder, "qbtw37"); g_assert_true(sw); scroll_gsw=sw; // GtkScrolledWindow
+  bc_tanakh.dyn->scroll_gsw=gtk_builder_get_object(builder, "gsw_tanakh"); g_assert_true(bc_tanakh.dyn->scroll_gsw); // GtkScrolledWindow
+  bc_newtestament.dyn->scroll_gsw=gtk_builder_get_object(builder, "gsw_newtestament"); g_assert_true(bc_newtestament.dyn->scroll_gsw); // GtkScrolledWindow
 
-  GObject *const win=gtk_builder_get_object(builder, "tf2fhx"); g_assert_true(win);
+  GObject *const win=gtk_builder_get_object(builder, "aaw"); g_assert_true(win);
   g_signal_connect(win, "close-request", G_CALLBACK(cb_close), NULL);
 
   if(!isMobile()){
@@ -212,8 +216,9 @@ void ui_app_activate_cb(AdwApplication *app){
   gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(win));
 
   gtk_widget_show(GTK_WIDGET(win)); // gtk_window_present(GTK_WINDOW(win));
-  if(do_scroll)
-    scroll_dispatch();
+
+  scroll_dispatch(bc_tanakh.dyn);
+  scroll_dispatch(bc_newtestament.dyn);
 
 }
 

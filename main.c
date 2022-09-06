@@ -21,32 +21,10 @@ int g_application_run2(ARGPARA){
 int main(ARGPARA){
 
   // backend
+  bs_chdir();
   bs_init();
-  bc_check(&tanakh);
-  bc_check(&nt);
-
-  g_assert_true(0==chdir(g_get_user_config_dir()));
-  gchar *curd=g_get_current_dir(); // g_canonicalize_filename
-  g_assert_true(curd);
-  g_assert_true(0==g_strcmp0("/home/user/.config", curd) || 0==g_strcmp0("/home/darren/.config", curd));
-  g_free(curd); curd=NULL;
-
-  g_assert_true(0==g_mkdir_with_parents("./adwible", 0755));
-  g_assert_true(0==chdir("./adwible")); 
-
-  bs_tanakh=bs_new(tanakh.n_total_chapters+1);
-  bs_load(bs_tanakh, tanakh.progress);
-  // bs_test(bs_tanakh);
-
-  // const int r_md=g_mkdir_with_parents("./adwible", 0755);
-  // g_assert_true(0==chdir("./adwible"));
-  // g_message("r_md=%d", r_md);
-  // if(-1==r_md){
-  //   g_assert_true(EEXIST==errno);
-  //   bs_load(bs_tanakh, tanakh.progress);
-  // }else{
-  //   g_assert_true(0==r_md);
-  // }
+  bc_init(&bc_tanakh);
+  bc_init(&bc_newtestament);
 
   // gui
   adw_init();
@@ -60,7 +38,8 @@ int main(ARGPARA){
 
   // cleanup
   ui_unregister_gres();
-  bs_free(bs_tanakh); bs_tanakh=NULL;
+  bs_free(bc_tanakh.dyn->bs); bc_tanakh.dyn->bs=NULL;
+  bs_free(bc_newtestament.dyn->bs); bc_newtestament.dyn->bs=NULL;
 
   // exit
   return e;

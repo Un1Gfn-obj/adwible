@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include <gtk/gtk.h> // GtkWidget
+
 #include "bs.h" // bitset
 
 // bible
@@ -13,13 +15,23 @@
 typedef struct bc_testament_s bc_testament_t;
 typedef struct bc_group_s     bc_group_t;
 typedef struct bc_book_s      bc_book_t;
+typedef struct bc_dyn_s       bc_dyn_t;
 
-// err "array type has incomplete element type"
-// typedef const bc_group_t bc_testament_t[];
+struct bc_dyn_s {
+  //
+  bitset_t *bs;
+  const char *autoexpand;
+  //
+  gboolean   scroll_do;
+  GObject   *scroll_gsw; // GtkScrolledWindow
+  GtkWidget *scroll_aer; // AdwExpanderRow
+  GtkWidget *scroll_apg; // AdwPreferencesGroup
+};
 
 struct bc_testament_s {
-  const char *const progress;
-  const char *const autoexpand;
+  bc_dyn_t *const dyn;
+  const char *const fn_progress;
+  const char *const fn_autoexpand;
   const int n_total_groups;
   const int n_total_books;
   const int n_total_chapters;
@@ -39,8 +51,7 @@ struct bc_book_s {
   const char *const subtitle;
 };
 
-// old testament
-extern const bc_testament_t tanakh;
-extern const bc_testament_t nt;
+extern const bc_testament_t bc_tanakh;
+extern const bc_testament_t bc_newtestament;
 
-void bc_check(const bc_testament_t *const);
+void bc_init(const bc_testament_t *const);
